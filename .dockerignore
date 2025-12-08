@@ -1,0 +1,6 @@
+/vendor
+./package-lock.json
+.git
+.idea
+.env
+.env.production
