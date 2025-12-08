@@ -19,7 +19,11 @@ use App\Http\Controllers\FormBuilderController;
 use App\Http\Controllers\HomeContentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\NavigationContentController;
 use Illuminate\Support\Facades\Route;
+
+
+
 
 
 Route::prefix('inventory')->middleware(['auth'])->group(function () {
@@ -30,6 +34,8 @@ Route::prefix('inventory')->middleware(['auth'])->group(function () {
     Route::get('/login', [AuthController::class, 'index'])
         ->withoutMiddleware(['auth'])
         ->name('login');
+
+
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -123,6 +129,8 @@ Route::prefix('inventory')->middleware(['auth'])->group(function () {
     //donation drive report
     Route::get('/donation-drive/{id}/report', [\App\Http\Controllers\Inventory\DonationDriveController::class, 'report'])->name('donations-drive.report');
 
+    Route::patch('/navigation-content/{id}', [NavigationContentController::class,'update'])
+        ->name('navigation-content.update');
 
     Route::get('/activity-logs', [ActivityLogController::class,'index'])->name('activity-logs.index');
     Route::delete('/activity-logs/{id}', [ActivityLogController::class,'destroy'])->name('activity-logs.destroy');

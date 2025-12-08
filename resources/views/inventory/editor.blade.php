@@ -33,15 +33,14 @@
             </div>
         @endif
 
-
     <h1 class="mb-4">Page Content Management</h1>
 
     <ul class="nav nav-tabs mb-4" id="cmsTab" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="nav-tav" data-bs-toggle="tab" data-bs-target="#editNav" type="button" role="tab">Navigation</button>
+            <button class="nav-link active" id="nav-tav" data-bs-toggle="tab" data-bs-target="#editNav" type="button" role="tab">Navigation</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab">Home Page</button>
+            <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab">Home Page</button>
         </li>
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab">About Page</button>
@@ -52,15 +51,52 @@
         
     </ul>
 
-     <div class="tab-pane fade" id="editNav" role="tabpanel" aria-labelledby="nav-tav">
-        hello world
-    </div>
-
-
     <div class="tab-content" id="cmsTabContent">
 
+        <div class="tab-pane fade show active" id="editNav" role="tabpanel" aria-labelledby="nav-tav">
+            <form method="POST" action="{{ route('navigation-content.update', ['id' =>  $navigation->id]) }}">
+
+                @csrf
+                @method('PATCH')
+
+                <div class="mb-3">
+                    <label>Mobile Number</label>
+                    <input name="mobile" value="{{ $navigation->email ?? '' }}" class="form-control">
+                </div>
+                
+                <div class="mb-3">
+                    <label>Telephone</label>
+                    <input name="email" value="{{ $navigation->mobile ?? '' }}" class="form-control">
+                </div>
+
+                <div class="container">
+
+                    <p>Social Links</p>
+
+                    <div class="row">
+                        @foreach ($navigation->socials as $social)
+                            <div class="col-6">
+                            <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text h-100" id="basic-addon1">
+                                            {!! $social->icon !!}
+                                        </span>
+                                    </div>
+                                    <input name="social[{{$social->id}}]" value="{{$social->link}}" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="d-flex items-center justify-end">
+                    <button class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+
         <!-- Home Page Content Editor -->
-        <div class="tab-pane fade show active" id="home" role="tabpanel">
+        <div class="tab-pane fade" id="home" role="tabpanel">
             <form id="homeForm" method="POST" action="{{ route('home.cms.update', ['page' => 'home']) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PATCH')
@@ -284,14 +320,12 @@
 
         <!-- About Page -->
         <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="about-tab">
-        @include('inventory.edit-about')
-    </div>
+          @include('inventory.edit-about')
+        </div>
 
-    <div class="tab-pane fade" id="donateus" role="tabpanel" aria-labelledby="donateus-tab">
-        @include('inventory.edit-donate-us')
-    </div>
-
-
+        <div class="tab-pane fade" id="donateus" role="tabpanel" aria-labelledby="donateus-tab">
+            @include('inventory.edit-donate-us')
+        </div>
     </div>
 </div>
 

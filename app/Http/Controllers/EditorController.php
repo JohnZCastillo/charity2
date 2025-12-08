@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\AboutContent;
 use Illuminate\Support\Facades\Log;
 use App\Models\ActivityLog;
+use App\Models\NavigationContent;
 
 class EditorController extends Controller
 {
@@ -16,6 +17,8 @@ class EditorController extends Controller
     {
         $user = User::findOrFail(1);
         $home = HomeContent::first();
+
+        $navigation = NavigationContent::first();
 
         if ($home) {
             $home->team_members = $home->team_members ?? [];
@@ -28,10 +31,12 @@ class EditorController extends Controller
              'user_id' => auth()->user()->id,
             'activity' => 'Visited Editor page.'
         ]);
+
         return view('inventory.editor', [
             'user' => $user,
             'home' => $home,
-            'sections' => $sections
+            'sections' => $sections,
+            'navigation' => $navigation
         ]);
     }
 
