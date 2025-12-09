@@ -19,7 +19,7 @@ class SlotFinder
         $startPeriod = Carbon::parse('08:00');
         $endPeriod = Carbon::parse('17:00');
 
-        $period = CarbonPeriod::create($startPeriod, '1 hour', $endPeriod);
+        $period = CarbonPeriod::create($startPeriod, '30 minutes', $endPeriod);
 
         $hours = [];
         $slots = [];
@@ -28,6 +28,7 @@ class SlotFinder
             ->where('date', $date)
             ->get()
             ->toArray();
+
 
         foreach ($period as $date) {
 
@@ -70,7 +71,6 @@ class SlotFinder
 
             $slots[] = $hours[$i]->format('h:i a');
         }
-
 
         return count($slots) > 1 ? $slots : [];
     }

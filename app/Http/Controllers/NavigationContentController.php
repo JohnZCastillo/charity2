@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\NavigationContent;
 use App\Http\Requests\StoreNavigationContentRequest;
 use App\Http\Requests\UpdateNavigationContentRequest;
+use Exception;
+use Illuminate\Support\Arr;
 
 class NavigationContentController extends Controller
 {
@@ -55,6 +57,9 @@ class NavigationContentController extends Controller
     {
 
 
+        try{
+
+        
         $validated = $request->validate([
             'email' => 'required',
             'mobile' => 'required',
@@ -66,16 +71,30 @@ class NavigationContentController extends Controller
         $navigationContent->email = $validated['email'];
         $navigationContent->mobile = $validated['mobile'];
 
-        foreach ($validated['social'] as $key => $social) {
-              
-            $targetSocial = array_find($navigationContent->social, function($target) use($key){
-                    return $target->id == $key;
-                });
+        $navigationIcons = [];
 
-            dd($targetSocial);
+        foreach($navigationContent->socials as $social){
+
+            $targetSocial = Arr::first($validated['social'], function ($value, $key) use($social) {
+                return $social->id == $key;
+            });
+
+            if($targetSocial){
+                $social->link = $targetSocial;
+            }
+
+            $navigationIcons[] = $social;
         }
+      
+        $navigationContent->socials = $navigationIcons;
 
-        // return redirect()->back();
+        $navigationContent->save();
+
+        return redirect()->back();
+
+        }catch(Exception $e){
+            return redirect()->back()->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /**

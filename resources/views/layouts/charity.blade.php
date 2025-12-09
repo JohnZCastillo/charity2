@@ -140,6 +140,7 @@
 {{--    </div>--}}
 {{--</div>--}}
 
+<div class="position-sticky top-0 bg-white">
 <header class="d-none d-md-block py-2">
     <div class="ps-5 d-flex gap-2 align-items-center">
         <a class="small text-secondary text-decoration-none border-end border-secondary border-1 pe-2">Telephone {{$home->telephone ?? ''}}</a>
@@ -159,7 +160,7 @@
         </a>
     </div>
 </header>
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow py-0 stick-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow py-0">
     <div class="container-fluid px-2 px-lg-5 " style="min-height: 90px; heigh: max-content">
         <div class="navbar-brand">
             <a href="/" style="text-decoration:none;">
@@ -194,6 +195,7 @@
         </div>
     </div>
 </nav>
+</div>
 
 <main>
     @yield('body')
