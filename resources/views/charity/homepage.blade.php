@@ -111,6 +111,13 @@
                         {{ $home->cta_button ?? 'Donate' }}
                     </button>
 
+                    <a 
+                    href="{{ route('events.index',['upcoming'=> true]) }}"
+                    target="_"
+                            class="btn btn-success px-5 py-3 rounded-3 shadow">
+                            Volunter Now
+                       </a>
+
                     <a href="tel:{{ $home->telephone ?? '' }}"
                        class="d-flex align-items-center text-decoration-none text-dark fw-semibold">
                         <i class="bi bi-telephone-fill text-success me-2 fs-4"></i>
@@ -267,6 +274,10 @@
                                     <p class="mb-1"><i class="far fa-clock me-2 text-success"></i>{{ $event->start->format('h:i A') }}</p>
                                     <p class="mb-1"><i class="fas fa-calendar-alt me-2 text-info"></i>{{ $event->start->format('M d, Y') }}</p>
                                     <p class="mb-0"><i class="fas fa-map-marker-alt me-2 text-danger"></i>{{ $event->place }}</p>
+                                
+                                    @if($event->canRegister)
+                                        <a class="btn btn-primary" href="{{ route('form.public.show',['id' => $event->form->id, 'event_id' => $event->id])}}" target="_">Register Now</a>
+                                    @endif
                                 </div>
                             </div>
                         </div>

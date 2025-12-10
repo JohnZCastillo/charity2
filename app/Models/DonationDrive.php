@@ -28,7 +28,9 @@ class DonationDrive extends Model
 
     public function getRaisedAttribute()
     {
-        return $this->donations->sum('amount');
+        return $this->donations
+        ->where('confirmed', true)
+        ->sum('amount');
 
     }
 }

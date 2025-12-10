@@ -84,7 +84,11 @@
         @endphp
 
         <form method="POST" action="{{ route('form-builder.submission', $form->id) }}" enctype="multipart/form-data">
-    @csrf
+     @csrf
+
+     @if ($eventID)
+         <input name="event_id" type='hidden' class="d-none" value="{{ $eventID }}" />
+     @endif
 
     @foreach ($fields as $field)
         <div class="form-section">

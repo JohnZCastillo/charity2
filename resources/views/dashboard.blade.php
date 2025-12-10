@@ -570,12 +570,26 @@ document.addEventListener('DOMContentLoaded', function () {
             colors: colorPalette,
             series: [{
                 name: "Donation",
-                data: @json(array_map(fn($value)=>$value['total'],$itemsCountCategory)),
+                data: @json(array_map(fn($value)=>$value->total,$donatedItemHistory)),
             }],
-            labels: @json(array_map(fn($value)=>$value['name'],array_merge($itemCategories,[['name'=>'unknown']]))),
+            labels: @json(array_map(fn($value)=>$value->name,$donatedItemHistory)),
             xaxis: {
                 labels: {
-                    show: true
+                    show: true,
+                    formatter: function (val) {
+                        const array = val.split(" ");
+
+                        if(array.length > 1 ){
+
+                            const shortcut = array.reduce((prev,current) => {
+                                return prev + current.split("")[0];
+                            }, "")
+
+                            return `${array[0]} (${shortcut})`;
+                        }
+
+                        return array[0];
+                    }
                 },
                 axisBorder: {
                     show: false
@@ -594,7 +608,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 labels: {
                     style: {
                         colors: '#78909c'
-                    }
+                    },
                 }
             },
             title: {
@@ -603,8 +617,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 style: {
                     fontSize: '18px'
                 }
+            },
+            tooltip: {
+                x: {
+                    formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
+                        return value
+                    }
+                }
             }
-
         }
 
         var chartBar = new ApexCharts(document.querySelector('#bar'), optionsBar);

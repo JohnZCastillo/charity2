@@ -120,6 +120,8 @@ Route::prefix('inventory')->middleware(['auth'])->group(function () {
     Route::get('/donation-drive', [\App\Http\Controllers\Inventory\DonationDriveController::class, 'index'])->name('donationdrive.index');
     Route::get('/donation-drive/{donationDriveID}', [\App\Http\Controllers\Inventory\DonationDriveController::class, 'donationDriveData']);
     Route::post('/donation/confirm', [\App\Http\Controllers\Inventory\DonationDriveController::class, 'confirm'])->name('donation.confirm');
+    Route::post('/donation/amount', [\App\Http\Controllers\Inventory\DonationDriveController::class, 'amount'])->name('donation.amount');
+
     Route::post('/donation-drive', [\App\Http\Controllers\Inventory\DonationDriveController::class, 'add']);
     Route::patch('/donation-drive/{donationDrive}', [\App\Http\Controllers\Inventory\DonationDriveController::class, 'update']);
     Route::delete('/donation-drive/{donationDrive}', [\App\Http\Controllers\Inventory\DonationDriveController::class, 'delete']);

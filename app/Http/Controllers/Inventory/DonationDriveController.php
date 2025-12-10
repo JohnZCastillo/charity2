@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Inventory;
 
+use App\Enums\ExpenseType;
 use App\Enums\MoneyType;
 use App\Enums\UserType;
 use App\Http\Controllers\Controller;
@@ -12,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Models\ActivityLog;
+use App\Models\Expense;
+use Carbon\Carbon;
 
 class DonationDriveController extends Controller
 {
@@ -35,6 +38,23 @@ class DonationDriveController extends Controller
             ->paginate(10)
             ->appends($request->except('page'));
 
+            $startDate = Carbon::now()->startOfMonth()->startOfDay()->format('Y-m-d H:m');
+            $endDate = Carbon::now()->endOfMonth()->endOfDay()->format('Y-m-d H:m');
+      
+            
+        $totalExpenses = Expense::whereBetween('created_at',[$startDate, $endDate])
+                ->where('type',ExpenseType::EXPENSE)
+                ->sum('amount');
+
+        $totalDonation = DonationDriveData::whereBetween('created_at',[$startDate, $endDate])
+                ->where('type', MoneyType::CASH)
+                ->where('confirmed', true)
+                ->sum('amount');
+
+        $totalSubsidies = Expense::whereBetween('created_at',[$startDate, $endDate])
+                ->where('type',ExpenseType::DONATE)
+                ->sum('amount');
+
         $funds = DonationDrive::select(['id', 'title'])
             ->where('archived', false)
             ->get();
@@ -48,6 +68,9 @@ class DonationDriveController extends Controller
             'donations' => $donations,
             'funds' => $funds,
             'recipients' => $recipients,
+            'totalExpenses' => $totalExpenses,
+            'totalDonations' => $totalDonation,
+            'totalSubsidies' => $totalSubsidies
         ]);
     }
 
@@ -210,6 +233,28 @@ class DonationDriveController extends Controller
             'activity' => 'Confirmed the GCash donation of '.$donation->from
         ]);
         return redirect()->back()->with('success', 'Donation confirmed successfully!');
+    }
+
+
+     public function amount(Request $request)
+    {
+     
+        $validated = $request->validate([
+            'id' => 'required',
+            'amount' => 'required|numeric',
+        ]);
+
+
+        $donation = DonationDriveData::findOrFail($validated['id']);
+        $donation->amount = $validated['amount'];
+        $donation->save();
+
+        ActivityLog::create([
+            'user_id' => auth()->user()->id,
+            'activity' => 'Edited received amount to '.$donation->amount
+        ]);
+
+        return redirect()->back()->with('success', 'Donation Amount Edited Successfully!');
     }
 
     public function updateStatus(Request $request, $id)

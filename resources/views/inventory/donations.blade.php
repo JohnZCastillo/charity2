@@ -19,6 +19,31 @@
     </div>
 @endif
 
+
+    <div class="row mx-0 align-items-center gap-2 mb-2">
+        <div class="col-12 col-md-2 flex-fill shadow p-3 rounded text-center">
+            <div class="d-flex flex-column align-items-center">
+                <h1 class="fw-bold mb-0">{{  \App\Helpers\CurrencyFormatter::currency($totalDonations ?? 0)}}</h1>
+                <i class="text-secondary bx bx-lg bx-user-check"></i>
+            </div>
+            <small class="text-secondary">Donations this month</small>
+        </div>
+        <div class="col-12 col-md-2 flex-fill shadow p-3 rounded text-center">
+            <div class="d-flex flex-column align-items-center">
+                <h1 class="fw-bold mb-0">{{  \App\Helpers\CurrencyFormatter::currency($totalExpenses ?? 0)}}</h1>
+                <i class="text-secondary bx bx-lg bx-user-minus"></i>
+            </div>
+            <small class="text-secondary">Expenses this month</small>
+        </div>
+        <div class="col-12 col-md-2 flex-fill shadow p-3 rounded text-center">
+            <div class="d-flex flex-column align-items-center">
+                <h1 class="fw-bold mb-0">{{  \App\Helpers\CurrencyFormatter::currency($totalSubsidies ?? 0)}}</h1>
+                <i class="text-secondary bx bx-lg bx-package"></i>
+            </div>
+            <small class="text-secondary">Total Subsidy This Month</small>
+        </div>
+    </div>
+
         {{-- Success Message --}}
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">

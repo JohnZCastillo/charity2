@@ -61,15 +61,18 @@ class FormBuilderController extends Controller
         return view('inventory.show-form', compact('form'));
     }
 
-    public function publicShow($id)
+    public function publicShow(Request $request, $id)
     {
+
+        $eventID = $request->query('event_id', null);
+
         $form = \App\Models\Form::find($id);
 
         if (!$form) {
             return response()->view('inventory.form-not-found', [], 404);
         }
 
-        return view('inventory.public-show-form', compact('form'));
+        return view('inventory.public-show-form', compact('form', 'eventID'));
     }
 
 
@@ -86,16 +89,16 @@ class FormBuilderController extends Controller
 
     public function submit(Request $request, $formId)
     {
+
         $form = Form::findOrFail($formId);
-    
        
     // ✅ Enforce response limit if set
         if ($form->response_limit !== null && $form->responses()->count() >= $form->response_limit) {
-        $submittedCount = $form->responses()->count();
-        return back()->withErrors([
-            'form_limit' => "This form has reached its response limit of {$form->response_limit} submissions. Current count: {$submittedCount}."
-        ]);
-    }
+            $submittedCount = $form->responses()->count();
+            return back()->withErrors([
+                'form_limit' => "This form has reached its response limit of {$form->response_limit} submissions. Current count: {$submittedCount}."
+            ]);
+       }
     
         $fields = is_array($form->structure) ? $form->structure : json_decode($form->structure, true);
         $responses = [];
@@ -154,20 +157,28 @@ class FormBuilderController extends Controller
         FormResponse::create([
             'form_id' => $form->id,
             'response' => $responses,
+            'event_id' => $request->input('event_id', null)
         ]);
     
         return back()->with('submitted', $responses);
     }
     
 
-    public function responses($id)
+    public function responses(Request $request, $id)
     {
-        $form = Form::with('responses')->findOrFail($id);
+        $form = Form::with([
+            'responses' => function($qb) use($request){
+                $qb->when($request->query('event_id', false), function($qb) use($request){
+                    return $qb->where('event_id', $request->query('event_id'));
+                });
+            },
+        ])->findOrFail($id);
 
          ActivityLog::create([
              'user_id' => auth()->user()->id,
             'activity' => 'Viewed Form Responses.'
         ]);
+
         return view('inventory.form-responses', compact('form'));
     }
 

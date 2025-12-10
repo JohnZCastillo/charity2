@@ -34,6 +34,9 @@
     </div>
 
     <form method="GET" class="row g-3 align-items-end mb-4">
+
+        <input type="hidden" class="d-none" name="event_id" value="{{ request('event_id') }}">
+
         <div class="col-md-3">
             <label class="form-label">From</label>
             <input type="date" name="from" value="{{ request('from') }}" class="form-control">

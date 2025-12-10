@@ -38,6 +38,7 @@ class HomeController extends Controller
 
         // --- Donations ---
         $donations = DonationDrive::orderBy('created_at', 'desc')
+        ->with(['donations'])
             ->where('archived', false)
             ->get();
 

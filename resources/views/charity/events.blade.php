@@ -56,6 +56,10 @@
                                         <span>Location: {{$event->location}}</span>
                                     </li>
                                 </ul>
+
+                                @if($event->canRegister)
+                                    <a class="btn btn-primary" href="{{ route('form.public.show',['id' => $event->form->id, 'event_id' => $event->id])}}" target="_">Register Now</a>
+                                @endif
                             </div>
                         </div>
                     </div>

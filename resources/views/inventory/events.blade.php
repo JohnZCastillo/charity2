@@ -60,6 +60,7 @@
                         <th>location</th>
                         <th>Start</th>
                         <th>End</th>
+                        <th>Form</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -72,6 +73,14 @@
                             <td class="text-capitalize">{{$event->location}}</td>
                             <td class="text-capitalize">{{$event->start->format('y-m-d')}}</td>
                             <td class="text-capitalize">{{$event->end->format('y-m-d')}}</td>
+                            <td class="text-capitalize">
+                                @if($event->form)
+                                <div class='d-flex gap-2'>
+                                    <a href="{{route('form-builder.show',['form' => $event->form->id ])}}" target="_">{{$event->form->title}}</>
+                                    <a href="{{route('form-builder.responses',['id' => $event->form->id, 'event_id' => $event->id ])}}" target="_">Responses</>
+                                </div>
+                                @endif
+                            </td>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     <a type="button" href="/inventory/events/{{$event->id}}" class="btn btn-secondary">Edit</a>
@@ -106,19 +115,28 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
+                        <div class="form-group mb-2">
                             <label>Image</label>
                             <input type="file" accept="image/*" class="form-control" name="images[]" multiple>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-2">
                             <label>Title</label>
                             <input type="text" class="form-control" name="title">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-2">
                             <label>Description</label>
                             <textarea name="description" class="form-control"></textarea>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-2">
+                            <label for="description">Select Form</label>
+                            <select name='form_id' class="form-select">
+                                <option value="0">None</option>
+                                @foreach ($forms as $form)
+                                    <option value="{{$form->id}}">{{$form->title}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mb-2">
                             <label>Location</label>
                             <input type="text" class="form-control" name="location">
                         </div>

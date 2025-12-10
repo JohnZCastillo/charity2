@@ -106,7 +106,22 @@ class DashboardController extends Controller
         $types = ItemCategory::select(['id','name'])
             ->get();
 
-                   $itemsCountCategory = Item::select(
+        $startDate = Carbon::now()->subMonths(3)->startOfMonth()->startOfDay()->format('Y-m-d H:m');
+        $endDate = Carbon::now()->endOfMonth()->endOfDay()->format('Y-m-d H:m');
+      
+        $donatedItemHistory = DB::select("
+            SELECT i.name as name, sum(d.quantity) as total from donations d
+            LEFT JOIN items i on i.id = d.item_id
+            where i.created_at between :start and :end
+            group by i.id, i.name
+        ",[
+            'start' => $startDate,
+            'end' => $endDate
+        ]);
+
+        // dd($donatedItemHistory);
+
+        $itemsCountCategory = Item::select(
             'item_category_id',
             DB::raw(
                 'COUNT(id) as total'
@@ -175,7 +190,8 @@ class DashboardController extends Controller
             'itemCategoryType' => $itemCategoryType,
             'inquiries' => $inquiries,
             'confirmedAppointments' => $confirmedAppointments,
-            'lowStockItem' => $lowStockItem
+            'lowStockItem' => $lowStockItem,
+            'donatedItemHistory' => $donatedItemHistory, 
         ]);
     }
 }

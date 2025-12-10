@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Inventory;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\EventImage;
+use App\Models\Form;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -16,6 +17,7 @@ class EventController extends Controller
     {
 
         $query = Event::query();
+        $forms = Form::get();
 
         $query->when($request->input('search'), function ($qb) use ($request) {
             $qb->where(function ($qb) use ($request) {
@@ -31,10 +33,13 @@ class EventController extends Controller
             $qb->orderBy($request->input('order'), $request->input('sort'));
         });
 
+        $query->with(['form']);
+        
         $events = $query->paginate(10);
 
         return view('inventory.events', [
-            'events' => $events
+            'events' => $events,
+            'forms' => $forms,
         ]);
     }
 
@@ -44,8 +49,11 @@ class EventController extends Controller
         $event = Event::with(['images'])
             ->findOrFail($eventID);
 
+        $forms = Form::get();
+
         return view('inventory.event', [
-            'event' => $event
+            'event' => $event,
+            'forms' => $forms,
         ]);
     }
 
@@ -82,12 +90,17 @@ class EventController extends Controller
                 'location' => 'required|string',
                 'start' => 'required|date',
                 'end' => 'required|date',
-                'images' => 'nullable'
+                'images' => 'nullable',
+                'form_id' => 'required'
             ]);
 
             $event = Event::findOrFail($eventID);
 
             $event->fill($validated);
+
+            if($validated['form_id'] == '0'){
+                $event->form_id = null;
+            }
 
             $event->save();
 
@@ -131,6 +144,7 @@ class EventController extends Controller
                 'location' => 'required|string',
                 'start' => 'required|date',
                 'end' => 'required|date',
+                'form_id' => 'required'
             ]);
 
             $event = Event::create([
@@ -139,6 +153,7 @@ class EventController extends Controller
                 'location' => $validated['location'],
                 'start' => $validated['start'],
                 'end' => $validated['end'],
+                'form_id' => $validated['form_id'] == '0' ? null : $validated['form_id'],
             ]);
 
             foreach ($request->file('images') as $image) {

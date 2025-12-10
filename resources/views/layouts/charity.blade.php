@@ -126,6 +126,11 @@
     @yield('files')
     @yield('styles')
 
+    <style>
+        .modal{
+            top: 130px !important
+        } 
+    </style>
 </head>
 <body>
 <!-- ? Preloader Start -->
@@ -140,61 +145,61 @@
 {{--    </div>--}}
 {{--</div>--}}
 
-<div class="position-sticky top-0 bg-white">
-<header class="d-none d-md-block py-2">
-    <div class="ps-5 d-flex gap-2 align-items-center">
-        <a class="small text-secondary text-decoration-none border-end border-secondary border-1 pe-2">Telephone {{$home->telephone ?? ''}}</a>
-        <a class="small text-secondary text-decoration-none border-end border-secondary border-1 pe-2">Email:
-            {{$home->contact_email ?? ''}}</a>
-        <a class="small text-secondary text-decoration-none" href="#">
-            <i class='bx bx-xs bxl-twitter'></i>
-        </a>
-        <a class="small text-secondary text-decoration-none" href="https://www.facebook.com/sai4ull">
-            <i class='bx bx-xs bxl-facebook'></i>
-        </a>
-        <a class="small text-secondary text-decoration-none" href="#">
-            <i class='bx bx-xs bxl-linkedin'></i>
-        </a>
-        <a class="small text-secondary text-decoration-none" href="#">
-            <i class='bx bx-xs bxl-google-plus'></i>
-        </a>
-    </div>
-</header>
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow py-0">
-    <div class="container-fluid px-2 px-lg-5 " style="min-height: 90px; heigh: max-content">
-        <div class="navbar-brand">
-            <a href="/" style="text-decoration:none;">
-            <p class="fw-bold mb-0 pb-0 text-wrap">Missionaries of Charity Brothers</p>
-            {{-- <img src="/img/logo/logo.png" alt="Charity"> --}}
+<div class="position-sticky top-0 bg-white" style="z-index: 1059">
+    <header class="d-none d-md-block py-2">
+        <div class="ps-5 d-flex gap-2 align-items-center">
+            <a class="small text-secondary text-decoration-none border-end border-secondary border-1 pe-2">Telephone {{$home->telephone ?? ''}}</a>
+            <a class="small text-secondary text-decoration-none border-end border-secondary border-1 pe-2">Email:
+                {{$home->contact_email ?? ''}}</a>
+            <a class="small text-secondary text-decoration-none" href="#">
+                <i class='bx bx-xs bxl-twitter'></i>
+            </a>
+            <a class="small text-secondary text-decoration-none" href="https://www.facebook.com/sai4ull">
+                <i class='bx bx-xs bxl-facebook'></i>
+            </a>
+            <a class="small text-secondary text-decoration-none" href="#">
+                <i class='bx bx-xs bxl-linkedin'></i>
+            </a>
+            <a class="small text-secondary text-decoration-none" href="#">
+                <i class='bx bx-xs bxl-google-plus'></i>
             </a>
         </div>
+    </header>
+    <nav  class="navbar navbar-expand-lg navbar-light bg-white shadow py-0">
+        <div class="container-fluid px-2 px-lg-5 " style="min-height: 90px; heigh: max-content">
+            <div class="navbar-brand">
+                <a href="/" style="text-decoration:none;">
+                <p class="fw-bold mb-0 pb-0 text-wrap">Missionaries of Charity Brothers</p>
+                {{-- <img src="/img/logo/logo.png" alt="Charity"> --}}
+                </a>
+            </div>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="bi bi-list text-success" style="font-size: 25px"></i>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end bg-white" id="navbarNav">
-            <ul class="navbar-nav me-3 gap-2">
-                <li class="nav-item {{ Request::is('charity') ? 'active-page' : '' }}">
-                    <a class="nav-link text-primary" href="/charity">Home</a></li>
-                <!-- <li class="nav-item {{ Request::is('charity/announcements') ? 'active-page' : '' }}">
-                    <a class="nav-link text-primary" href="/charity/announcements">Announcement</a>
-                </li>
-                <li class="nav-item {{ Request::is('charity/events') ? 'active-page' : '' }}">
-                    <a class="nav-link text-primary" href="/charity/events">Social Events</a></li> -->
-                <li class="nav-item {{ Request::is('charity/contact-us') ? 'active-page' : '' }}">
-                    <a class="nav-link text-primary" href="/charity/contact-us">Contact</a>
-                </li>
-                <!-- <li class="nav-item {{ Request::is('charity/about-us') ? 'active-page' : '' }}">
-                    <a class="nav-link text-primary" href="/charity/about-us">About</a>
-                </li> -->
-            </ul>
-            <div class="d-none d-lg-block">
-                <a href="/charity/appointment" class="btn btn-success text-white px-4 py-3 rounded-0">Appointment</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="bi bi-list text-success" style="font-size: 25px"></i>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end bg-white" id="navbarNav">
+                <ul class="navbar-nav me-3 gap-2">
+                    <li class="nav-item {{ Request::is('charity') ? 'active-page' : '' }}">
+                        <a class="nav-link text-primary" href="/charity">Home</a></li>
+                    <!-- <li class="nav-item {{ Request::is('charity/announcements') ? 'active-page' : '' }}">
+                        <a class="nav-link text-primary" href="/charity/announcements">Announcement</a>
+                    </li>
+                    <li class="nav-item {{ Request::is('charity/events') ? 'active-page' : '' }}">
+                        <a class="nav-link text-primary" href="/charity/events">Social Events</a></li> -->
+                    <li class="nav-item {{ Request::is('charity/contact-us') ? 'active-page' : '' }}">
+                        <a class="nav-link text-primary" href="/charity/contact-us">Contact</a>
+                    </li>
+                    <!-- <li class="nav-item {{ Request::is('charity/about-us') ? 'active-page' : '' }}">
+                        <a class="nav-link text-primary" href="/charity/about-us">About</a>
+                    </li> -->
+                </ul>
+                <div class="d-none d-lg-block">
+                    <a href="/charity/appointment" class="btn btn-success text-white px-4 py-3 rounded-0">Appointment</a>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
 </div>
 
 <main>

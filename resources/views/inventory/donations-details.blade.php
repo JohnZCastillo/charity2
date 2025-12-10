@@ -49,6 +49,7 @@
                     <th>Amount</th>
                     <th>Date</th>
                     <th>Status</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -77,6 +78,13 @@
                                         data-bs-target="#confirmModal">
                                     <i class="fas fa-check"></i> Confirm
                                 </button>
+                            @endif
+                        </td>
+                         <td>
+                            @if($donation->confirmed)
+                                  --
+                            @else
+                                 <button type='button' onclick="openEditmodal({{json_encode($donation)}})" class='btn btn-secondary'>Edit</button>
                             @endif
                         </td>
                     </tr>
@@ -122,7 +130,44 @@
   </div>
 </div>
 
+<div class="modal fade" id="editAmountModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="editForm" method="POST" action="{{ route('donation.amount') }}">
+      @csrf
+      <input type="hidden" name="donation_id" id="donationId">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmModalLabel">Edit Amount</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+            <p>Edit amount receveid from <span class='strong' id='editFormDonor'></span></p>
+
+            <input name='id' type='hidden' class='d-none' id='editFormID' />
+            <div class='from-groupd'>
+                <label>Amount </label>
+                <input name='amount' id='editFormAmount' type='number' class='form-control' />
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-success">Confirm</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
 <script>
+
+var myModal = null;
+var editFormID = null;
+var editFormDonor = null;
+
+var editFormAmount = null;
+
 document.addEventListener('DOMContentLoaded', function () {
     let confirmButtons = document.querySelectorAll('.btn-confirm');
     let donationIdInput = document.getElementById('donationId');
@@ -133,7 +178,26 @@ document.addEventListener('DOMContentLoaded', function () {
             donationIdInput.value = donationId;
         });
     });
+
+    myModal = new bootstrap.Modal(document.getElementById('editAmountModal'))
+    editFormDonor = document.querySelector("#editFormDonor");
+    editFormID = document.querySelector("#editFormID");
+    editFormAmount = document.querySelector("#editFormAmount");
 });
+
+    function  openEditmodal(donor) {
+
+            if(!myModal || !editFormID || !editFormDonor || !editFormAmount){
+                console.error('cannot find modal or input id')
+                return;
+            }
+
+        editFormDonor.innerHTML = donor.from;
+        editFormID.value = donor.id;
+        editFormAmount.value = donor.amount;
+        myModal.show();
+    }
+
 </script>
 
 @endsection
