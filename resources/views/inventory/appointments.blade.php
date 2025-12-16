@@ -56,7 +56,7 @@
             </tr>
             </thead>
             <tbody>
-            @forelse ($appointments->whereIn('status',['pending','rescheduled','confirmed']) as $appointment)
+            @forelse ($appointments->whereIn('status',['pending','rescheduled','confirmed','cancelled']) as $appointment)
                 <tr>
                     <td>{{$appointment->name}}</td>
                    <td>
@@ -82,6 +82,8 @@
                             <span class="badge bg-dark">Rescheduled</span>
                         @elseif($appointment->status == 'confirmed')
                             <span class="badge bg-info">Confirmed</span>
+                        @elseif($appointment->status == 'cancelled')
+                            <span class="badge bg-secondary">Cancelled</span>
                         @endif
                     </td>
                     <td class="d-flex gap-1">
@@ -91,13 +93,32 @@
                                 @csrf
                                 <button class="btn btn-sm btn-primary">Confirm</button>
                             </form>
+
+                            <a href="#"
+                                class="btn btn-sm btn-secondary sendReply"
+                                data-bs-toggle="modal"
+                                data-bs-target="#replyModal"
+                                data-id="{{ $appointment->id }}"
+                                data-email="{{ $appointment->email }}">
+                                 Reschedule      
+                            </a>
+
+                            
+                            <a href="#"
+                                class="btn btn-sm btn-danger sendCancelReply"
+                                data-bs-toggle="modal"
+                                data-bs-target="#cancelModal"
+                                data-id="{{ $appointment->id }}"
+                                data-email="{{ $appointment->email }}">
+                                 Cancel
+                            </a>
                         @endif
 
                         @if($appointment->status == 'confirmed')
                             <!-- Done -->
                             <form method="POST" action="{{ route('appointments.done', $appointment->id) }}">
                                 @csrf
-                                <button class="btn btn-sm btn-success">Done</button>
+                                <button class="btn btn-sm btn-success">Accomplished</button>
                             </form>
 
                             <!-- Unaccomplished -->
@@ -176,9 +197,8 @@
     <form id="replyForm" method="POST" action="{{ route('appointments.reschedule') }}">
       
         @csrf
-      <input type="hidden" name="appointment_id" id="modal_appointment_id">
+        <input type="hidden" name="appointment_id" id="modal_appointment_id">
         
-
 
         <div class="modal-content">
           <div class="modal-header">
@@ -215,13 +235,59 @@
     </form>
   </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<!-- Reply Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="replyForm" method="POST" action="{{ route('appointments.cancel') }}">
 
+        @csrf
+       <input type="hidden" name="appointment_id" id="cancel_appointment_id">
+        
+
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="replyModalLabel">Send Cancel Notice</h5>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+              <span>&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+             <div class="form-group">
+                <label>Email Address</label>
+                <input type="text" name="email" id="cancel_modal_email" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Subject</label>
+                <input type="text" name="subject" class="form-control" value="Cancel Notice">
+            </div>
+            <div class="form-group">
+                <label>Message</label>
+                <textarea name="message" class="form-control" rows="5">Dear Sir/Madam, 
+                We would like to inform you that your appointment is cancelled. Kindly contact us for further details.
+
+                Thank you, 
+                Missionaries of Charity Brothers</textarea>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Send Email</button>
+          </div>
+        </div>
+    </form>
+  </div>
+</div>
 
 @endsection
 
 @section('scripts')
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
     <script>
         window.addEventListener('load', () => {
             reloadOnEmpty('#searchForm', '#searchInput');
@@ -229,16 +295,28 @@
         })
     </script>
     <script>
-$(document).ready(function () {
-    $(document).on("click", ".sendReply", function () {
-        var appointmentId = $(this).data('id');
-        var email = $(this).data('email');
+        
+    $(document).ready(function () {
+        $(document).on("click", ".sendReply", function () {
+    
+            var appointmentId = $(this).data('id');
+            var email = $(this).data('email');
 
-        console.log("Clicked ID:", appointmentId, "Email:", email);
+            $("#modal_appointment_id").val(appointmentId);
+            $("#modal_email").val(email);
+        });
 
-        $("#modal_appointment_id").val(appointmentId);
-        $("#modal_email").val(email);
+         $(document).on("click", ".sendCancelReply", function () {
+    
+            var appointmentId = $(this).data('id');
+            var email = $(this).data('email');
+
+            console.log('fucking email: ', email);
+
+            $("#cancel_appointment_id").val(appointmentId);
+            $("#cancel_modal_email").val(email);
+        });
     });
-});
+
 </script>
 @endsection

@@ -185,6 +185,33 @@
                 </tbody>
             </table>
         </div>
+
+
+          <div class="card shadow-sm mb-5"> <!-- Removed mb-5 -->
+            <div class="card-body">
+                <h2 class="fw-bold mb-4 text-success border-bottom pb-2 text-center">🙏 Donor Logs</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle text-center">
+                        <thead class="table-success">
+                            <tr>
+                                <th>Date</th>
+                                <th>Contributor</th>
+                                <th>Food Item / Goods</th>
+                                <th>Quantity</th>
+                                <th>Donation Type</th>
+                            </tr>
+                        </thead>
+                        <tbody id="donorLogsBody">
+                            <tr>
+                                <td colspan="5" class="text-muted">Loading donor logs...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-4 d-flex justify-content-center" id="donorLogsPagination"></div>
+            </div>
+        </div>
+
     </div>
 
     <!-- Modal -->
@@ -721,4 +748,51 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    function fetchDonorLogs(page = 1) {
+        $.ajax({
+            url: "{{ route('donor.logs.fetch') }}?page=" + page,
+            type: "GET",
+            success: function(response) {
+                let tbody = $("#donorLogsBody");
+                tbody.empty();
+
+                if (response.data.length === 0) {
+                    tbody.append(`<tr><td colspan="5" class="text-muted">No donor logs available yet.</td></tr>`);
+                } else {
+                    response.data.forEach(log => {
+                        tbody.append(`
+                            <tr>
+                                <td>${log.date}</td>
+                                <td>${log.contributor_name}</td>
+                                <td>${log.item}</td>
+                                <td>${log.quantity}</td>
+                                <td>${log.donation_type}</td>
+                            </tr>
+                        `);
+                    });
+                }
+
+                // Render pagination
+                $("#donorLogsPagination").html(response.pagination);
+            },
+            error: function() {
+                $("#donorLogsBody").html(`<tr><td colspan="5" class="text-danger">Failed to load donor logs.</td></tr>`);
+            }
+        });
+    }
+
+    // Initial load
+    $(document).ready(function() {
+        fetchDonorLogs();
+
+        // Handle pagination click
+        $(document).on("click", "#donorLogsPagination a", function(e) {
+            e.preventDefault();
+            let page = $(this).attr("href").split("page=")[1];
+            fetchDonorLogs(page);
+        });
+    });
+</script>
 @endsection

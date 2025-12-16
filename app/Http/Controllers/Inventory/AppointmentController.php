@@ -37,6 +37,9 @@ class AppointmentController extends Controller
             ->when($request->input('order'), function ($qb) use ($request) {
                 $qb->orderBy($request->input('order'), $request->input('sort'));
             })
+             ->when($request->input('order'), function ($qb) use ($request) {
+                $qb->orderBy($request->input('order'), $request->input('sort'));
+            })
             ->paginate(10)
             ->appends($request->except('page'));
 
@@ -269,6 +272,31 @@ class AppointmentController extends Controller
         return back()->with('success', 'Appointment confirmed & email sent!');
     }
 
+    
+    public function cancel($id)
+    {
+        $appointment = Appointment::findOrFail($id);
+        $appointment->status = 'confirmed';
+        $appointment->save();
+
+        // Send confirmation email
+        Mail::to($appointment->email)->send(new AppointmentConfirmedMail($appointment));
+
+        return back()->with('success', 'Appointment confirmed & email sent!');
+    }
+
+        public function reschedule($id)
+    {
+        $appointment = Appointment::findOrFail($id);
+        $appointment->status = 'confirmed';
+        $appointment->save();
+
+        // Send confirmation email
+        Mail::to($appointment->email)->send(new AppointmentConfirmedMail($appointment));
+
+        return back()->with('success', 'Appointment confirmed & email sent!');
+    }
+
     public function done($id)
     {
         $appointment = Appointment::findOrFail($id);
@@ -287,27 +315,49 @@ class AppointmentController extends Controller
         return back()->with('success', 'Appointment marked as unaccomplished!');
     }
 
-    public function sendReschedule(Request $request)
-{
-    $request->validate([
-        'appointment_id' => 'required|exists:appointments,id',
-        'email' => 'required|email',
-        'subject' => 'required|string',
-        'message' => 'required|string',
-    ]);
+    public function sendReschedule(Request $request){
+    
+        $request->validate([
+            'appointment_id' => 'required|exists:appointments,id',
+            'email' => 'required|email',
+            'subject' => 'required|string',
+            'message' => 'required|string',
+        ]);
 
-    $appointment = Appointment::findOrFail($request->appointment_id);
+        $appointment = Appointment::findOrFail($request->appointment_id);
 
-    Mail::to($request->email)->send(new AppointmentRescheduleMail(
-        $request->subject,
-        $request->message,
-        $appointment->name
-    ));
+        Mail::to($request->email)->send(new AppointmentRescheduleMail(
+            $request->subject,
+            $request->message,
+            $appointment->name
+        ));
 
-    // optional: update status if needed
-    $appointment->update(['status' => 'rescheduled']);
+        // optional: update status if needed
+        $appointment->update(['status' => 'rescheduled']);
 
-    return back()->with('success', 'Reschedule notice sent successfully!');
-}
+        return back()->with('success', 'Reschedule notice sent successfully!');
+    }
 
+    public function sendCancelled(Request $request){
+    
+        $request->validate([
+            'appointment_id' => 'required|exists:appointments,id',
+            'email' => 'required|email',
+            'subject' => 'required|string',
+            'message' => 'required|string',
+        ]);
+
+        $appointment = Appointment::findOrFail($request->appointment_id);
+
+        Mail::to($request->email)->send(new AppointmentRescheduleMail(
+            $request->subject,
+            $request->message,
+            $appointment->name
+        ));
+
+        // optional: update status if needed
+        $appointment->update(['status' => 'cancelled']);
+
+        return back()->with('success', 'Reschedule notice sent successfully!');
+    }
 }

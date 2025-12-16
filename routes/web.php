@@ -89,11 +89,15 @@ Route::prefix('inventory')->middleware(['auth'])->group(function () {
     Route::post('/appointment-slot', [\App\Http\Controllers\Inventory\AppointmentController::class, 'addSlot']);
     Route::delete('/appointment-slot', [\App\Http\Controllers\Inventory\AppointmentController::class, 'updateSlot']);
 
+    Route::post('/appointments/reschedule', [\App\Http\Controllers\Inventory\AppointmentController::class, 'sendReschedule'])
+     ->name('appointments.reschedule');
+
     Route::post('/appointments/{id}/confirm', [\App\Http\Controllers\Inventory\AppointmentController::class, 'confirm'])->name('appointments.confirm');
     Route::post('/appointments/{id}/done', [\App\Http\Controllers\Inventory\AppointmentController::class, 'done'])->name('appointments.done');
     Route::post('/appointments/{id}/undone', [\App\Http\Controllers\Inventory\AppointmentController::class, 'undone'])->name('appointments.undone');
-    Route::post('/appointments/reschedule', [\App\Http\Controllers\Inventory\AppointmentController::class, 'sendReschedule'])
-     ->name('appointments.reschedule');
+
+    Route::post('/appointments/cancel', [\App\Http\Controllers\Inventory\AppointmentController::class, 'sendCancelled'])
+     ->name('appointments.cancel');
 
 
     Route::post('/block-appointment-slot', [\App\Http\Controllers\Inventory\AppointmentController::class, 'addBlockSlot']);
