@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 class APIController extends Controller
 {
 
-    public function slot($date)
+    public function slot($date, Request $request)
     {
 
-        $slots = SlotFinder::getAvailableSlot($date);
+        $slots = SlotFinder::getAvailableSlot($date, $request->input('appointment'));
 
         return response()->json($slots);
     }

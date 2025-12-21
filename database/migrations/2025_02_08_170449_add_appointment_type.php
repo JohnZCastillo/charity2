@@ -16,6 +16,7 @@ return new class extends Migration {
                 \App\Enums\AppointmentType::MEETING->value,
                 \App\Enums\AppointmentType::ASKING_FOR_HELP->value,
                 \App\Enums\AppointmentType::DONATION->value,
+                \App\Enums\AppointmentType::OTHERS->value,
             ])->change();
         });
     }

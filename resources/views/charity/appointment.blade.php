@@ -81,18 +81,29 @@
                             <input type="text" class="form-control" name="date" id="date" readonly>
                         </div>
 
+                        <div class="mb-2">
+                            <label for="appointment_for">Appointment for:</label>
+                            <select class="text-capitalize form-select" id="appointment_for" name="type" required>
+                                @foreach(\App\Enums\AppointmentType::cases() as $type)
+                                    <option class="text-capitalize" value="{{$type->value}}">{{$type->value}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <div class="mb-2 row mx-0">
 
+                            <p  id="timeSelectionLabel">Please select appointment type first</p>
+                            
                             <div class="col-6 ps-0 position-relative">
                                 <label for="start">Start</label>
-                                <select class="form-select" id="start" name="start" required>
+                                <select disabled class="form-select" id="start" name="start" required>
                                     <option selected disabled>Select time</option>
                                 </select>
                             </div>
 
                             <div class="col-6 pe-0">
                                 <label for="end">End</label>
-                                <select class="form-select" id="end" name="end" required>
+                                <select disabled class="form-select" id="end" name="end" required>
                                     <option selected disabled>Select time</option>
                                 </select>
                             </div>
@@ -111,18 +122,16 @@
                                    class="form-control"
                                    required>
                         </div>
-                        <div class="mb-2">
-                            <label for="appointment_for">Appointment for:</label>
-                            <select class="text-capitalize form-select" id="appointment_for" name="type" required>
-                                @foreach(\App\Enums\AppointmentType::cases() as $type)
-                                    <option class="text-capitalize" value="{{$type->value}}">{{$type->value}}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                      
                         <div class="mb-2">
                             <label for="appointment_description">Appointment Description:</label>
                             <textarea class="form-control" id="appointment_description" name="message"
                                       placeholder="I wish to get an appointment to give donations" required></textarea>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="note">Note:</label>
+                            <textarea class="form-control" id="note" name="note"></textarea>
                         </div>
                         <div class="grid mb-2">
                             <button type="submit" class="py-4 col-12 btn btn-success text-white ">Request For
@@ -143,7 +152,8 @@
         const date = document.querySelector('#date');
         const start = document.querySelector('#start');
         const end = document.querySelector('#end');
-
+        const appoinmentType = document.querySelector('#appointment_for');
+        
         document.addEventListener('DOMContentLoaded', function () {
 
             var calendarEl = document.getElementById('calendar');
@@ -185,9 +195,61 @@
             appointmentForm.submit();
         })
 
+        appoinmentType.addEventListener('change',(e)=>{
+            start.disabled = false;
+            end.disabled = false;
+            timeSelectionLabel.classList.add('d-none');
+
+            getAvailableTime(date.value);
+        })
+
+        function timeToMinutes(timeStr) {
+            const [time, period] = timeStr.toLowerCase().split(/([ap]m)/);
+            let [hours, minutes] = time.split(':').map(Number);
+            
+            if (period === 'pm' && hours !== 12) hours += 12;
+            if (period === 'am' && hours === 12) hours = 0;
+            
+            return hours * 60 + (minutes || 0);
+        }
+
+        function isWithinLunchWindow(start, end) {
+            const startMinutes = timeToMinutes(start);
+            const endMinutes = timeToMinutes(end);
+            const lunchStart = 9 * 60 + 30;  // 570 (9:30 AM)
+            const lunchEnd = 13 * 60;        // 780 (1:00 PM)
+            
+            return startMinutes < lunchEnd && endMinutes > lunchStart;
+        }
+
+        start.addEventListener('change',checkDateSelection);
+        end.addEventListener('change',checkDateSelection);
+
+        function checkDateSelection(){
+            
+            if(!start.value || !end.value){
+                return
+            }
+
+            if(isWithinLunchWindow(start.value, end.value) && appoinmentType.value?.toLowerCase() === 'visit'){
+                 Swal.fire({
+                    title: 'Error!',
+                    text: 'Invalid Slot Selection 9:30 am - 1:00 pm is unavailable',
+                    icon: 'error',
+                    confirmButtonText: 'Close',
+                })
+
+                start.value = null;
+                end.value = null;
+            }
+        }
+
         async function getAvailableTime(date) {
 
-            const response = await fetch(`/api/slot/${date}`);
+            const url = `/api/slot/${date}`;
+            const dateValue = `?appointment=${appoinmentType.value}`;
+
+            const response = await fetch(`${url}${ appoinmentType.value ? dateValue : ''}`);
             const slots = await response.json();
 
             start.innerHTML = null;
@@ -221,8 +283,6 @@
             }
 
         }
-
-
 
         $('.timepicker').timepicker({
             timeFormat: 'h:mm p',

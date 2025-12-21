@@ -9,4 +9,6 @@ enum ReportType: string
 
     case RECIPIENT = 'Recipient';
     case DONOR = 'Donor';
+    case CASH = 'Cash';
+
 }

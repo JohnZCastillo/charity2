@@ -10,4 +10,5 @@ enum AppointmentType: string
     case VISIT = 'visit';
     case ASKING_FOR_HELP = 'asking for help';
     case DONATION = 'donation';
+    case OTHERS = 'others';
 }

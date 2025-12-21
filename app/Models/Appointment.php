@@ -21,6 +21,7 @@ class Appointment extends Model
         'end',
         'date',
          'status',
+         'note',
     ];
 
     protected $casts = [
@@ -28,9 +29,9 @@ class Appointment extends Model
     ];
 
     public function getTimeAttribute()
-{
-    return $this->start . ' - ' . $this->end;
-}
+    {
+        return $this->start . ' - ' . $this->end;
+    }
 
 
 }

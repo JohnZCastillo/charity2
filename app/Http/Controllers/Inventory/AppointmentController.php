@@ -43,8 +43,38 @@ class AppointmentController extends Controller
             ->paginate(10)
             ->appends($request->except('page'));
 
+        $completedAppointments = Appointment::whereIn('status',['done','undone'] )
+            ->when($request->input('search'), function ($qb) use ($request) {
+                $qb->where(function ($qb) use ($request) {
+                    $qb->orWhereLike('name', '%' . $request->input('search') . '%');
+                    $qb->orWhereLike('email', '%' . $request->input('search') . '%');
+                });
+            })
+            ->when($request->input('hiddenFilter'), function ($qb) use ($request) {
+                $qb->where(function ($qb) use ($request) {
+
+                    if( in_array($request->input('hiddenFilter'),['meeting','visit','asking for help','others','donation'])){
+                       $qb->where('type',$request->input('hiddenFilter'));
+                    }else if(in_array($request->input('hiddenFilter'), ['done','undone'])){
+                       $qb->where('status',$request->input('hiddenFilter'));
+                    }
+
+                    // $qb->where('type',$request->input('hiddenFilter'));
+                //     $qb->orWhereLike('email', '%' . $request->input('search') . '%');
+                });
+            })
+            ->when($request->input('order'), function ($qb) use ($request) {
+                $qb->orderBy($request->input('order'), $request->input('sort'));
+            })
+             ->when($request->input('order'), function ($qb) use ($request) {
+                $qb->orderBy($request->input('order'), $request->input('sort'));
+            })
+            ->paginate(10)
+            ->appends($request->except('page'));
+
         return view('inventory.appointments', [
-            'appointments' => $appointments
+            'appointments' => $appointments,
+            'completedAppointments' => $completedAppointments
         ]);
     }
 
@@ -62,7 +92,8 @@ class AppointmentController extends Controller
                 'start' => 'required|date_format:h:i a',
                 'end' => 'required|date_format:h:i a',
                 'date' => 'required|date',
-                'type' => ['required', Rule::enum(AppointmentType::class)]
+                'type' => ['required', Rule::enum(AppointmentType::class)],
+                'note' => 'nullable|string|max:255',
             ], [
                 'start.required' => 'Please choose start time',
                 'end.required' => 'Please choose start time',
@@ -108,10 +139,12 @@ class AppointmentController extends Controller
 
         } catch (InvalidInputException|ValidationException $e) {
             DB::rollBack();
-            return redirect()->back()->withErrors(['message' => $e->getMessage()]);
+            dd($e->getMessage());
+            // return redirect()->back()->withErrors(['message' => $e->getMessage()]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->withErrors(['message' => 'Something went wrong while setting an appointment, Please try again']);
+            dd($e->getMessage());
+            // return redirect()->back()->withErrors(['message' => 'Something went wrong while setting an appointment, Please try again']);
         }
     }
 

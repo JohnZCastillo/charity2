@@ -13,7 +13,7 @@ class SlotFinder
      * @param string $date must follow Y-m-d format
      * @return array
      */
-    public static function getAvailableSlot(string $date): array
+    public static function getAvailableSlot(string $date, string $appoinmentType = ''): array
     {
 
         $startPeriod = Carbon::parse('08:00');
@@ -29,6 +29,12 @@ class SlotFinder
             ->get()
             ->toArray();
 
+            if(strtolower($appoinmentType) == 'visit'){
+                array_push($appointments, [
+                    'start' =>  '10:30',
+                    'end' =>  '13:00'
+                ]);
+            }
 
         foreach ($period as $date) {
 

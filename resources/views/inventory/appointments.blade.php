@@ -17,6 +17,8 @@
                    type="search" name="search" class="form-control">
         </div>
 
+         <input type="hidden" name="hiddenFilter" id="hiddenFilter" class="d-none">
+
         <div class="col-sm-12 d-flex align-items-center mt-2 gap-2 flex-wrap flex-md-nowrap ">
             <div class="d-flex align-items-center gap-2">
                 <label class="text-nowrap">Order By</label>
@@ -34,6 +36,8 @@
                     <option @selected($app->request->sort == 'asc') value="asc">Ascending</option>
                 </select>
             </div>
+
+            <a href="/inventory/appointment-slot" class="ms-auto d-block btn btn-secondary">Appointment Slost</a>
         </div>
     </form>
 
@@ -47,6 +51,7 @@
                 <th>Email</th>
                 <th>Contact</th>
                 <th>Message</th>
+                <th>Note</th>
                 <th>Type</th>
                 <th>Date</th>
                 <th>Start</th>
@@ -71,6 +76,7 @@
                     </td>
                     <td>{{$appointment->contact}}</td>
                     <td>{{$appointment->message}}</td>
+                    <td>{{$appointment->note}}</td>
                     <td>{{$appointment->type->value}}</td>
                     <td>{{$appointment->date}}</td>
                     <td>{{$appointment->start}}</td>
@@ -140,7 +146,24 @@
     </div>
 
     {{-- ================= ACCOMPLISHED + UNACCOMPLISHED ================= --}}
-    <h5 class="mt-3">✅ Completed Appointments</h5>
+    
+    <div class="d-flex items-center gap-3 mt-3">
+         <h5 class="mb-0 mt-1">✅ Completed Appointments</h5>
+        <div class="d-flex align-items-center gap-2 mb-2">
+            <label class="text-nowrap">Filter</label>
+            <select class="form-select absolute" id="filter" name="filter">
+                <option value="">All</option>
+                <option value="undone" @selected($app->request->hiddenFilter == 'undone')>Unaccomplish</option>
+                <option value="done" @selected($app->request->hiddenFilter == 'done')>Accomplish</option>
+                <option value="meeting" @selected($app->request->hiddenFilter == 'meeting')>Meeting</option>
+                <option value="asking for help" @selected($app->request->hiddenFilter == 'asking for help')>Asking for Help</option>
+                <option value="donation" @selected($app->request->hiddenFilter == 'donation')>Donation</option>
+                <option value="visit" @selected($app->request->hiddenFilter == 'visit')>Visitation for Children</option>
+                <option value="others" @selected($app->request->hiddenFilter == 'others')>Others</option>
+            </select>
+        </div>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-hover table-bordered align-middle">
             <thead class="table-light">
@@ -149,6 +172,7 @@
                 <th>Email</th>
                 <th>Contact</th>
                 <th>Message</th>
+                <th>Note</th>
                 <th>Type</th>
                 <th>Date</th>
                 <th>Start</th>
@@ -157,12 +181,13 @@
             </tr>
             </thead>
             <tbody>
-            @forelse ($appointments->whereIn('status',['done','undone']) as $appointment)
+            @forelse ($completedAppointments as $appointment)
                 <tr>
                     <td>{{$appointment->name}}</td>
                     <td>{{$appointment->email}}</td>
                     <td>{{$appointment->contact}}</td>
                     <td>{{$appointment->message}}</td>
+                    <td>{{$appointment->note}}</td>
                     <td>{{$appointment->type->value}}</td>
                     <td>{{$appointment->date}}</td>
                     <td>{{$appointment->start}}</td>
@@ -207,6 +232,7 @@
               <span>&times;</span>
             </button>
           </div>
+
 
           <div class="modal-body">
              <div class="form-group">
@@ -316,6 +342,12 @@
             $("#cancel_appointment_id").val(appointmentId);
             $("#cancel_modal_email").val(email);
         });
+
+        document.querySelector('#filter').addEventListener('change', (e)=>{
+            document.querySelector('#hiddenFilter').value = e.target.value;
+            const form = document.querySelector('#searchForm')
+            form.submit();
+        })
     });
 
 </script>

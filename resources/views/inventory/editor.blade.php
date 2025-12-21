@@ -38,7 +38,7 @@
 
     <ul class="nav nav-tabs mb-4" id="cmsTab" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="nav-tav" data-bs-toggle="tab" data-bs-target="#editNav" type="button" role="tab">Navigation</button>
+            <button class="nav-link active" id="nav-tav" data-bs-toggle="tab" data-bs-target="#editNav" type="button" role="tab">Payment Method0</button>
         </li>
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab">Home Page</button>
@@ -55,7 +55,7 @@
     <div class="tab-content" id="cmsTabContent">
 
         <div class="tab-pane fade show active" id="editNav" role="tabpanel" aria-labelledby="nav-tav">
-            <form method="POST" action="{{ route('navigation-content.update', ['id' =>  $navigation->id]) }}">
+            <!-- <form method="POST" action="{{ route('navigation-content.update', ['id' =>  $navigation->id]) }}">
 
                 @csrf
                 @method('PATCH')
@@ -72,17 +72,17 @@
 
                 <div class="container">
 
-                    <p>Social Links</p>
+                    <p>Methods</p>
 
                     <div class="row">
-                        @foreach ($navigation->socials as $social)
+                        @foreach ($paymentMethods as $paymentMethod)
                             <div class="col-6">
-                            <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text h-100" id="basic-addon1">
-                                            {!! $social->icon !!}
-                                        </span>
-                                    </div>
+                                <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text h-100" id="basic-addon1">
+                                                {!! $social->icon !!}
+                                            </span>
+                                        </div>
                                     <input name="social[{{$social->id}}]" value="{{$social->link}}" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
                                 </div>
                             </div>
@@ -93,7 +93,7 @@
                 <div class="d-flex items-center justify-end">
                     <button class="btn btn-primary">Save changes</button>
                 </div>
-            </form>
+            </form> -->
         </div>
 
         <!-- Home Page Content Editor -->

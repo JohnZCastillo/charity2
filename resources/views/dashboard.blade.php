@@ -351,6 +351,39 @@
         </div>
     </div>
 
+    <div class="modal fade" id="expenseReportFormModal" aria-hidden="true" aria-labelledby="recipientReportFormModalToggleLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" id="expenseReportForm" action="/recipient-report">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalToggleLabel2">Generate Report</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                            @csrf
+                             <input id="reportTypeInput2" type="hidden" class="d-none" name="reportType">
+
+                            <div class="mb-2">
+                                <label>From</label>
+                                <input type="month" class="form-control" name="date" required>
+                            </div>
+
+                            <div class="mb-2">
+                                <label>Type</label>
+                                <select  class="form-select" name="type" required>
+                                   <option value="organization">Expense for Organization</option>
+                                   <option value="recipient">Donate for Beneficiaries</option>
+                                </select>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
      <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.css" rel="stylesheet">
 @endsection
 
@@ -408,24 +441,38 @@ document.addEventListener('DOMContentLoaded', function () {
         const downloadBtn = document.getElementById('downloadBtn');
 
         const recipientReportForm =  document.querySelector('#recipientReportForm')
+        const expenseReportForm =  document.querySelector('#expenseReportForm')
+
         const reportTypeForm =  document.querySelector('#reportTypeForm')
 
+
         const recipientReportFormModal =  new bootstrap.Modal('#recipientReportFormModal')
+        const expenseReportFormModal =  new bootstrap.Modal('#expenseReportFormModal')
+
         const reportTypeModal =  new bootstrap.Modal('#reportTypeModal')
 
         const reportType = document.querySelector('#reportType');
+        
         const reportTypeInput = document.querySelector('#reportTypeInput');
+        const reportTypeInput2 = document.querySelector('#reportTypeInput2');
+
 
         reportTypeForm.addEventListener('submit',(e)=>{
             e.preventDefault();
 
             reportTypeInput.value  = reportType.value;
-
+            reportTypeInput2.value  = reportType.value;
+            
             reportTypeModal.hide();
-            recipientReportFormModal.show();
+
+            if( reportType.value?.toLowerCase() === 'cash'){
+                expenseReportFormModal.show();
+            }else{
+                recipientReportFormModal.show();
+            }
         })
 
-          recipientReportForm.addEventListener('submit', async (e)=>{
+        recipientReportForm.addEventListener('submit', async (e)=>{
 
             e.preventDefault();
             recipientReportFormModal.hide();
@@ -436,6 +483,33 @@ document.addEventListener('DOMContentLoaded', function () {
                 const response = await  fetch('/inventory/recipient-report',{
                     method: "POST",
                     body: new FormData(recipientReportForm)
+                })
+
+                if(!response.ok){
+                    throw new Error("Something went wrong, please try again!");
+                }
+
+                printBody.innerHTML = await  response.text();
+
+            }catch (error){
+                printBody.innerHTML = error.message;
+            }finally {
+                reportLoading.hide();
+                generatedReportModal.show();
+            }
+        })
+
+        expenseReportForm.addEventListener('submit', async (e)=>{
+
+            e.preventDefault();
+            expenseReportFormModal.hide();
+            reportLoading.show();
+
+            try{
+
+                const response = await  fetch('/inventory/recipient-report',{
+                    method: "POST",
+                    body: new FormData(expenseReportForm)
                 })
 
                 if(!response.ok){

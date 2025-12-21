@@ -10,6 +10,7 @@ use App\Models\AboutContent;
 use Illuminate\Support\Facades\Log;
 use App\Models\ActivityLog;
 use App\Models\NavigationContent;
+use App\Models\PaymentMethod;
 
 class EditorController extends Controller
 {
@@ -19,6 +20,7 @@ class EditorController extends Controller
         $home = HomeContent::first();
 
         $navigation = NavigationContent::first();
+        $paymentMethods = PaymentMethod::all();
 
         if ($home) {
             $home->team_members = $home->team_members ?? [];
@@ -36,7 +38,8 @@ class EditorController extends Controller
             'user' => $user,
             'home' => $home,
             'sections' => $sections,
-            'navigation' => $navigation
+            'navigation' => $navigation,
+            'paymentMethods' => $paymentMethods
         ]);
     }
 

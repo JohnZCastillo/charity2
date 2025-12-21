@@ -34,6 +34,8 @@ class ReportController extends Controller
                 return $this->donorReport($request);
             case ReportType::RECIPIENT:
                 return $this->recipientReport($request);
+            case ReportType::CASH:
+                return $this->cashExpenseReport($request);
             default:
                 return response()->json(['message' => 'invalid report type'], 400);
         }
@@ -128,6 +130,34 @@ class ReportController extends Controller
             'from' => $from,
             'generated' => $now,
             'type' => $type,
+        ]);
+    }
+
+    public function cashExpenseReport(Request $request)
+    {
+
+          $validated = $request->validate([
+                'type' => 'required',
+                'date' => 'required|date',
+            ]);
+
+        $from = Carbon::createFromFormat('Y-m', $validated['date'])
+            ->startOfMonth()->startOfDay();
+
+        $to = Carbon::createFromFormat('Y-m', $validated['date'])
+            ->endOfMonth()->endOfDay();
+
+        $expenses =  Expense::all()
+            ->where('type', ($validated['type'] === "organization" ? "expense" : "donate"))
+            ->whereBetween('created_at', [$from, $to]);
+
+        $now = Carbon::now()->toDate();
+
+        return view('inventory.pdf.cash-expense-report', [
+            'expenses' => $expenses,
+            'date' =>$validated['date'],
+            'generated' => $now,
+            'type' => $validated['type'],
         ]);
     }
 

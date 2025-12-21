@@ -42,90 +42,46 @@ class PaymentController extends Controller
             // Find donation drive
             $drive = DonationDrive::findOrFail($donationDriveId);
     
-            // Create checkout session with billing info
-            $response = Http::withBasicAuth(config('services.paymongo.secret_key'), '')
-                ->post('https://api.paymongo.com/v1/checkout_sessions', [
-                    'data' => [
-                        'attributes' => [
-                            'line_items' => [[
-                                'currency'    => 'PHP',
-                                'amount'      => $amountInCents,
-                                'name'        => $drive->title,
-                                'description' => 'Donation Drive ID: ' . $drive->id,
-                                'quantity'    => 1
-                            ]],
-                            'payment_method_types' => ['gcash'],
-                            'success_url' => url('/payment/success?amount=' . $amount . '&donation_drive_id=' . $drive->id . '&checkout_session_id={CHECKOUT_SESSION_ID}'),
-                            'cancel_url'  => url('/cancel?drive_id=' . $drive->id),
-    
-                            // Billing info for PayMongo checkout page
-                            'billing' => [
-                                'name'   => $name,
-                                'email'  => $email,
-                                'phone'  => $mobile,
-                            ],
-    
-                            // Extra metadata
-                            'metadata' => [
-                                'donation_drive_id'    => $drive->id,
-                                'donation_drive_title' => $drive->title,
-                                'donor_name'           => $name,
-                                'donor_email'          => $email,
-                                'donor_mobile'         => $mobile,
-                            ]
-                        ]
-                    ]
-                ]);
-    
-            $data = $response->json();
-            \Log::info($data);
-    
-            if ($response->successful()) {
                 // Save or update donor account
-                $account = Account::updateOrCreate(
-                    [ 
-                        'email' => $email // search by unique email
-                    ],
-                    [
-                        'code'   => null,
-                        'name'   => $name,
-                        'mobile' => $mobile,
-                        'status' => 'enabled',
-                        'type'   => 'donor',
-                    ]
-                );
+            $account = Account::updateOrCreate(
+                [ 
+                    'email' => $email // search by unique email
+                ],
+                [
+                    'code'   => null,
+                    'name'   => $name,
+                    'mobile' => $mobile,
+                    'status' => 'enabled',
+                    'type'   => 'donor',
+                ]
+            );
+        
+            // Ensure address exists for this account
+            Address::updateOrCreate(
+                [
+                    'account_id' => $account->id,
+                ],
+                [
+                    'address' => 'N/A',
+                ]
+            );
+        
+            $receipt = $request->file('receipt')->store('images', 'public');
+
+            // Save donation record (unconfirmed)
+            DonationDriveData::create([
+                'donation_drive_id' => $drive->id,
+                'amount'            => $amount,
+                'from'              => $name,
+                'email'             => $email,
+                'mobile'            => $mobile,
+                'receipt'           => $receipt,
+                'confirmed'         => false,
+                'type'              => 'gcash'
+            ]);
+        
+            return redirect()->back();
             
-                // Ensure address exists for this account
-                Address::updateOrCreate(
-                    [
-                        'account_id' => $account->id,
-                    ],
-                    [
-                        'address' => 'N/A',
-                    ]
-                );
-            
-                // Save donation record (unconfirmed)
-                DonationDriveData::create([
-                    'donation_drive_id' => $drive->id,
-                    'amount'            => $amount,
-                    'from'              => $name,
-                    'email'             => $email,
-                    'mobile'            => $mobile,
-                    'receipt'           => null,
-                    'confirmed'         => false,
-                    'type'              => 'gcash'
-                ]);
-            
-                return response()->json([
-                    'checkout_url' => $data['data']['attributes']['checkout_url']
-                ]);
-            }
-            
-            return response()->json([
-                'message' => $data['errors'][0]['detail'] ?? 'Unable to process payment'
-            ], 400);
-    
         } catch (\Exception $e) {
             Log::error('Checkout Error: ' . $e->getMessage());
             return response()->json([
