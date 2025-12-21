@@ -9,6 +9,7 @@ use App\Models\DonationDrive;
 use App\Models\DonationDriveData;
 use App\Models\Account;
 use App\Models\Address;
+use App\Models\PaymentMethod;
 
 class PaymentController extends Controller
 {
@@ -21,8 +22,11 @@ class PaymentController extends Controller
             ->where('archived', false)
             ->get();
 
+        $paymentMethods = PaymentMethod::all();
+
         return view('paymongo.paymongo', [
-            'drives' => $drives
+            'drives' => $drives,
+            'paymentMethods' => $paymentMethods
         ]);
     }
 

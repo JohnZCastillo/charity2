@@ -38,7 +38,7 @@
 
     <ul class="nav nav-tabs mb-4" id="cmsTab" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="nav-tav" data-bs-toggle="tab" data-bs-target="#editNav" type="button" role="tab">Payment Method0</button>
+            <button class="nav-link active" id="nav-tav" data-bs-toggle="tab" data-bs-target="#editNav" type="button" role="tab">Payment Method</button>
         </li>
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab">Home Page</button>
@@ -55,45 +55,109 @@
     <div class="tab-content" id="cmsTabContent">
 
         <div class="tab-pane fade show active" id="editNav" role="tabpanel" aria-labelledby="nav-tav">
-            <!-- <form method="POST" action="{{ route('navigation-content.update', ['id' =>  $navigation->id]) }}">
+            
+        <div class="d-flex items-center justify-content-between">
 
-                @csrf
-                @method('PATCH')
+            <p>Payment Methods</p>
 
-                <div class="mb-3">
-                    <label>Mobile Number</label>
-                    <input name="mobile" value="{{ $navigation->email ?? '' }}" class="form-control">
-                </div>
-                
-                <div class="mb-3">
-                    <label>Telephone</label>
-                    <input name="email" value="{{ $navigation->mobile ?? '' }}" class="form-control">
-                </div>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPaymentModal">
+                 New
+            </button>
+        </div>
 
-                <div class="container">
 
-                    <p>Methods</p>
+            <div class="d-flex items-center gap-2 flex-wrap p-2">
+                @foreach ($paymentMethods as $paymentMethod)
+                    <div class="card rounded p-1 position-relative" style="max-width: 300px;">
 
-                    <div class="row">
-                        @foreach ($paymentMethods as $paymentMethod)
-                            <div class="col-6">
-                                <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text h-100" id="basic-addon1">
-                                                {!! $social->icon !!}
-                                            </span>
-                                        </div>
-                                    <input name="social[{{$social->id}}]" value="{{$social->link}}" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-                                </div>
-                            </div>
-                        @endforeach
+                    <form action="{{ route('payment-method.delete', $paymentMethod->id) }}" method="POST" class="position-absolute" style="bottom: 20px; right: 10px;">
+                        @csrf
+                        @method('DELETE')
+                        
+                        <button type="submit" class="btn btn-danger btn-sm " style="width: 100px" 
+                                onclick="return confirm('Are you sure you want to delete this payment method?')">
+                                Delete
+                        </button>
+                    </form>
+
+
+                      <form action="{{ route('payment-method.update', ['id' => $paymentMethod->id]) }}" method="POST" class="card-body" enctype="multipart/form-data">
+                        @csrf
+                        @method('PATCH')
+                        
+                        <div class="mb-3">
+                            @if($paymentMethod->qr_code)
+                                <img src="{{ Storage::url($paymentMethod->qr_code) }}" class="img-fluid rounded" alt="Current QR Code" style="height: 200px;">
+                            @else
+                                <p class="text-muted">No QR code uploaded</p>
+                            @endif
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">QR Code (Optional)</label>
+                            <input type="file" name="qr_code" accept="image/*" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Bank Name</label>
+                            <input type="text" name="bank_name" value="{{ old('bank_name', $paymentMethod->bank_name) }}" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Account Name</label>
+                            <input type="text" name="account_name" value="{{ old('account_name', $paymentMethod->account_name) }}" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Account Number</label>
+                            <input type="text" name="account_number" value="{{ old('account_number', $paymentMethod->account_number) }}" class="form-control" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-sm" style="width: 100px">Update</button>
+                    </form>
+
+                    </div>   
+                @endforeach
+            </div>
+
+            <div class="modal fade" id="addPaymentModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <form  action="{{ route('payment-method.add') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="modal-header">
+                        <h5 class="modal-title">Add Payment Method</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">QR Code <span class="text-muted">(Optional)</span></label>
+                            <input type="file" name="qr_code" accept="image/*" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Bank Name <span class="text-danger">*</span></label>
+                            <input type="text" name="bank_name" value="{{ old('bank_name') }}" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Account Name <span class="text-danger">*</span></label>
+                            <input type="text" name="account_name" value="{{ old('account_name') }}" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Account Number <span class="text-danger">*</span></label>
+                            <input type="text" name="account_number" value="{{ old('account_number') }}" class="form-control" required>
+                        </div>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save Payment Method</button>
+                        </form>
+                    </div>
                     </div>
                 </div>
-
-                <div class="d-flex items-center justify-end">
-                    <button class="btn btn-primary">Save changes</button>
-                </div>
-            </form> -->
+            </div>
         </div>
 
         <!-- Home Page Content Editor -->

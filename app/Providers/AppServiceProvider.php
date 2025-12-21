@@ -23,9 +23,5 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
-
-        $navigationContent = NavigationContent::first();
-
-        View::share('navigationContent', $navigationContent);
     }
 }

@@ -528,7 +528,7 @@
                         <div class="mb-2">
                             <label for="type">Type</label>
                             <select id="type" class="form-select" name="type" required>
-                                <option value="gcash">Cash (GCash)</option>
+                                <option value="gcash">Bank / E-Wallet</option>
                                 <option value="cash">Cash (Personal)</option>
                                 <option value="goods">Goods</option>
                                 <option value="medicines">Medicines</option>

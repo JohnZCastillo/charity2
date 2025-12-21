@@ -11,42 +11,47 @@ use Illuminate\Support\Facades\Log;
 use App\Models\ActivityLog;
 use App\Models\NavigationContent;
 use App\Models\PaymentMethod;
+use Exception;
 
 class EditorController extends Controller
 {
     public function index()
     {
-        $user = User::findOrFail(1);
-        $home = HomeContent::first();
+        try{
+            $user = User::findOrFail(1);
+            $home = HomeContent::first();
 
-        $navigation = NavigationContent::first();
-        $paymentMethods = PaymentMethod::all();
+            $paymentMethods = PaymentMethod::all();
 
-        if ($home) {
-            $home->team_members = $home->team_members ?? [];
-            $home->section_cards = $home->section_cards ?? [];
-            $home->additional_sections = $home->additional_sections ?? [];
+            
+            if ($home) {
+                $home->team_members = $home->team_members ?? [];
+                $home->section_cards = $home->section_cards ?? [];
+                $home->additional_sections = $home->additional_sections ?? [];
+            }
+        
+            $sections = AboutContent::orderBy('order')->get();
+            ActivityLog::create([
+                'user_id' => auth()->user()->id,
+                'activity' => 'Visited Editor page.'
+            ]);
+
+
+            return view('inventory.editor', [
+                'user' => $user,
+                'home' => $home,
+                'sections' => $sections,
+                'paymentMethods' => $paymentMethods
+            ]);
+        }catch(Exception $e){
+            dd($e->getMessage());
         }
-       
-        $sections = AboutContent::orderBy('order')->get();
-          ActivityLog::create([
-             'user_id' => auth()->user()->id,
-            'activity' => 'Visited Editor page.'
-        ]);
-
-        return view('inventory.editor', [
-            'user' => $user,
-            'home' => $home,
-            'sections' => $sections,
-            'navigation' => $navigation,
-            'paymentMethods' => $paymentMethods
-        ]);
     }
 
     public function update(Request $request)
     {
         try {
-        $validated = $request->validate([
+            $validated = $request->validate([
             'main_title' => 'nullable|string|max:255',
             'sub_title' => 'nullable|string',
             'cta_button' => 'nullable|string|max:255',
@@ -174,9 +179,9 @@ class EditorController extends Controller
             'activity' => 'Updated elements at Editor page.'
         ]);
         return redirect()->back()->with('message', 'Home Page updated successfully!');
-    } catch (\Exception $e) {
-        Log::error('Home page update error: '.$e->getMessage());
-        return redirect()->back()->with('error', 'Failed to update Home Page. Please try again.');
+        } catch (\Exception $e) {
+            Log::error('Home page update error: '.$e->getMessage());
+            return redirect()->back()->with('error', 'Failed to update Home Page. Please try again.');
+        }
     }
-}
 }

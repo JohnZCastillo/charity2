@@ -19,6 +19,7 @@ use App\Http\Controllers\FormBuilderController;
 use App\Http\Controllers\HomeContentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\Inventory\PaymentMethodController;
 use App\Http\Controllers\NavigationContentController;
 use Illuminate\Support\Facades\Route;
 
@@ -112,6 +113,15 @@ Route::prefix('inventory')->middleware(['auth'])->group(function () {
     Route::delete('/inquiries/{inquiry}', [App\Http\Controllers\Inventory\InquiryController::class, 'destroy'])->name('inquiries.destroy');
 
 
+    Route::post('/payment-method', [PaymentMethodController::class,'addPaymentMethod'])
+        ->name('payment-method.add');
+
+    Route::patch('/payment-method/{id}', [PaymentMethodController::class,'updatePaymentMethod'])
+        ->name('payment-method.update');
+
+
+    Route::delete('/payment-method/{id}', [PaymentMethodController::class,'deletePaymentMethod'])
+        ->name('payment-method.delete');
 
 
     Route::get('/users', [\App\Http\Controllers\Inventory\UserController::class, 'index']);
@@ -134,6 +144,8 @@ Route::prefix('inventory')->middleware(['auth'])->group(function () {
     ->name('donations.updateStatus');
     //donation drive report
     Route::get('/donation-drive/{id}/report', [\App\Http\Controllers\Inventory\DonationDriveController::class, 'report'])->name('donations-drive.report');
+
+
 
     Route::patch('/navigation-content/{id}', [NavigationContentController::class,'update'])
         ->name('navigation-content.update');

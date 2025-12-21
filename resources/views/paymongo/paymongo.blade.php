@@ -6,7 +6,7 @@
 <div class="container p-5 ">
     <form id="payment-form" class="card p-4 shadow rounded"  action="{{ route('payment.checkout') }}" method="post" enctype="multipart/form-data">
         @csrf
-        <h4 class="mb-3 text-center">Pay with GCash</h4>
+        <h4 class="mb-3 text-center">Pay</h4>
 
         <div class="row">
             <div class="col-12 col-md-6">
@@ -52,13 +52,54 @@
                 </div>
 
             </div>
-            <div class="col-12 col-md-6">
-                 <img src="{{Storage::url('qr_image.jpg')}}" alt="profile Pic" class="img-fluid">
+           <div class="col-12 col-md-6">
+            <!-- Simple Tabs -->
+                <ul class="nav nav-tabs mb-3">
+                    @foreach($paymentMethods as $index => $method)
+                        <li class="nav-item">
+                            <a class="nav-link {{ $index == 0 ? 'active' : '' }}" 
+                            data-bs-toggle="tab" 
+                            href="#tab{{ $method->id }}">
+                                {{ Str::limit($method->bank_name, 15) }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    @foreach($paymentMethods as $index => $method)
+                        <div class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}" 
+                            id="tab{{ $method->id }}">
+                            
+                            @if($method->qr_code)
+                                <img src="{{ Storage::url($method->qr_code) }}" 
+                                    class="img-fluid mb-3" style="max-height: 200px;">
+                            @endif
+                            
+                            <div class="mb-2">
+                                <label class="text-muted small">Bank Name</label>
+                                <h6 class="mb-1">{{ $method->bank_name }}</h6>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="text-muted small">Account Name</label>
+                                <p class="mb-1"><strong>{{ $method->account_name }}</strong></p>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="text-muted small">Account Number</label>
+                                <p class="mb-0"><strong>{{ $method->account_number }}</strong></p>
+                            </div>
+
+                        </div>
+                    @endforeach
+                </div>
             </div>
         </div>
 
         <button type="submit" class="btn btn-success w-100 fw-bold">
-            <i class="bi bi-wallet2"></i> Pay with GCash
+            <i class="bi bi-wallet2"></i> Donate
         </button>
 
         <div id="payment-status" class="mt-3 text-center"></div>
