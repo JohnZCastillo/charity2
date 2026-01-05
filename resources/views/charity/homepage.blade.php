@@ -228,7 +228,6 @@
                                 <th>Date</th>
                                 <th>Contributor</th>
                                 <th>Food Item / Goods</th>
-                                <th>Quantity</th>
                                 <th>Donation Type</th>
                             </tr>
                         </thead>
@@ -579,7 +578,6 @@
                                 <td>${log.date}</td>
                                 <td>${log.contributor_name}</td>
                                 <td>${log.item}</td>
-                                <td>${log.quantity}</td>
                                 <td>${log.donation_type}</td>
                             </tr>
                         `);
