@@ -19,4 +19,8 @@ class Form extends Model
     public function responses() {
         return $this->hasMany(FormResponse::class);
     }
+
+    public function labels(){
+        return array_map(fn($item) => $item['label'] ,$this->structure);
+    }
 }

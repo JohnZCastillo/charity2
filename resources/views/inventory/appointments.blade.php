@@ -37,12 +37,39 @@
                 </select>
             </div>
 
+            <div class="d-flex align-items-center gap-2">
+                <label class="text-nowrap">Status</label>
+                <select class="form-select absolute" id="status" name="status">
+                    <option value="">All</option>
+                    <option value="undone" @selected($app->request->status == 'undone')>Unaccomplish</option>
+                    <option value="done" @selected($app->request->status == 'done')>Accomplish</option>
+                    <option value="pending" @selected($app->request->status == 'pending')>Pending</option>
+                    <option value="reschedule" @selected($app->request->status == 'reschedule')>Reschedule</option>
+                    <!-- <option value="meeting" @selected($app->request->hiddenFilter == 'meeting')>Meeting</option>
+                    <option value="asking for help" @selected($app->request->hiddenFilter == 'asking for help')>Asking for Help</option>
+                    <option value="donation" @selected($app->request->hiddenFilter == 'donation')>Donation</option>
+                    <option value="visit" @selected($app->request->hiddenFilter == 'visit')>Visitation for Children</option>
+                    <option value="others" @selected($app->request->hiddenFilter == 'others')>Others</option> -->
+                </select>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+                <label class="text-nowrap">Type</label>
+                <select class="form-select absolute" id="type" name="type">
+                    <option value="">All</option>
+                    <option value="meeting" @selected($app->request->type == 'meeting')>Meeting</option>
+                    <option value="asking for help" @selected($app->request->type == 'asking for help')>Asking for Help</option>
+                    <option value="donation" @selected($app->request->type == 'donation')>Donation</option>
+                    <option value="visit" @selected($app->request->type == 'visit')>Visitation for Children</option>
+                    <option value="others" @selected($app->request->type == 'others')>Others</option>
+                </select>
+            </div>
+
             <a href="/inventory/appointment-slot" class="ms-auto d-block btn btn-secondary">Appointment Slost</a>
         </div>
     </form>
 
-    {{-- ================= PENDING + CONFIRMED ================= --}}
-    <h5 class="mt-3">⏳ Pending & Confirmed Appointments</h5>
+    <h5 class="mt-3">Appointments</h5>
     <div class="table-responsive mb-4">
         <table class="table table-hover table-bordered align-middle">
             <thead class="table-light">
@@ -61,7 +88,7 @@
             </tr>
             </thead>
             <tbody>
-            @forelse ($appointments->whereIn('status',['pending','rescheduled','confirmed','cancelled']) as $appointment)
+            @forelse ($appointments as $appointment)
                 <tr>
                     <td>{{$appointment->name}}</td>
                    <td>
@@ -90,6 +117,10 @@
                             <span class="badge bg-info">Confirmed</span>
                         @elseif($appointment->status == 'cancelled')
                             <span class="badge bg-secondary">Cancelled</span>
+                        @elseif($appointment->status == 'done')
+                            <span class="badge bg-success">Accomplished</span>
+                        @elseif($appointment->status == 'undone')
+                            <span class="badge bg-danger">Unaccomplished</span>
                         @endif
                     </td>
                     <td class="d-flex gap-1">
@@ -97,11 +128,17 @@
                             <!-- Confirm -->
                             <form method="POST" action="{{ route('appointments.confirm', $appointment->id) }}">
                                 @csrf
-                                <button class="btn btn-sm btn-primary">Confirm</button>
+                                <button 
+                                    class="btn btn-sm btn-primary"
+                                    style="width: 90px;"
+                                >
+                                    Confirm
+                                </button>
                             </form>
 
                             <a href="#"
                                 class="btn btn-sm btn-secondary sendReply"
+                                style="width: 90px;"
                                 data-bs-toggle="modal"
                                 data-bs-target="#replyModal"
                                 data-id="{{ $appointment->id }}"
@@ -112,6 +149,7 @@
                             
                             <a href="#"
                                 class="btn btn-sm btn-danger sendCancelReply"
+                                style="width: 90px;"
                                 data-bs-toggle="modal"
                                 data-bs-target="#cancelModal"
                                 data-id="{{ $appointment->id }}"
@@ -138,77 +176,13 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="10" class="text-center text-secondary">No Pending/Confirmed Appointments</td>
+                    <td colspan="10" class="text-center text-secondary">No Appointments</td>
                 </tr>
             @endforelse
             </tbody>
         </table>
     </div>
-
-    {{-- ================= ACCOMPLISHED + UNACCOMPLISHED ================= --}}
-    
-    <div class="d-flex items-center gap-3 mt-3">
-         <h5 class="mb-0 mt-1">✅ Completed Appointments</h5>
-        <div class="d-flex align-items-center gap-2 mb-2">
-            <label class="text-nowrap">Filter</label>
-            <select class="form-select absolute" id="filter" name="filter">
-                <option value="">All</option>
-                <option value="undone" @selected($app->request->hiddenFilter == 'undone')>Unaccomplish</option>
-                <option value="done" @selected($app->request->hiddenFilter == 'done')>Accomplish</option>
-                <option value="meeting" @selected($app->request->hiddenFilter == 'meeting')>Meeting</option>
-                <option value="asking for help" @selected($app->request->hiddenFilter == 'asking for help')>Asking for Help</option>
-                <option value="donation" @selected($app->request->hiddenFilter == 'donation')>Donation</option>
-                <option value="visit" @selected($app->request->hiddenFilter == 'visit')>Visitation for Children</option>
-                <option value="others" @selected($app->request->hiddenFilter == 'others')>Others</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="table-responsive">
-        <table class="table table-hover table-bordered align-middle">
-            <thead class="table-light">
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Contact</th>
-                <th>Message</th>
-                <th>Note</th>
-                <th>Type</th>
-                <th>Date</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            @forelse ($completedAppointments as $appointment)
-                <tr>
-                    <td>{{$appointment->name}}</td>
-                    <td>{{$appointment->email}}</td>
-                    <td>{{$appointment->contact}}</td>
-                    <td>{{$appointment->message}}</td>
-                    <td>{{$appointment->note}}</td>
-                    <td>{{$appointment->type->value}}</td>
-                    <td>{{$appointment->date}}</td>
-                    <td>{{$appointment->start}}</td>
-                    <td>{{$appointment->end}}</td>
-                    <td>
-                        @if($appointment->status == 'done')
-                            <span class="badge bg-success">Accomplished</span>
-                        @elseif($appointment->status == 'undone')
-                            <span class="badge bg-danger">Unaccomplished</span>
-                        @endif
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="9" class="text-center text-secondary">No Completed Appointments</td>
-                </tr>
-            @endforelse
-            </tbody>
-        </table>
-    </div>
-
+  
     <div class="container mt-3">
         {{$appointments->links()}}
     </div>
@@ -317,7 +291,7 @@
     <script>
         window.addEventListener('load', () => {
             reloadOnEmpty('#searchForm', '#searchInput');
-            submitFormOnChange('#searchForm', '#orderBy', '#sortBy',);
+            submitFormOnChange('#searchForm', '#orderBy', '#sortBy','#status', '#type');
         })
     </script>
     <script>
@@ -343,11 +317,17 @@
             $("#cancel_modal_email").val(email);
         });
 
-        document.querySelector('#filter').addEventListener('change', (e)=>{
-            document.querySelector('#hiddenFilter').value = e.target.value;
-            const form = document.querySelector('#searchForm')
-            form.submit();
-        })
+        // document.querySelector('#filter').addEventListener('change', (e)=>{
+        //     document.querySelector('#hiddenFilter').value = e.target.value;
+        //     const form = document.querySelector('#searchForm')
+        //     form.submit();
+        // })
+
+        //  document.querySelector('#filter2').addEventListener('change', (e)=>{
+        //     document.querySelector('#filter2').value = e.target.value;
+        //     const form = document.querySelector('#searchForm')
+        //     form.submit();
+        // })
     });
 
 </script>
