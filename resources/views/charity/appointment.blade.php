@@ -83,7 +83,8 @@
 
                         <div class="mb-2">
                             <label for="appointment_for">Appointment for:</label>
-                            <select class="text-capitalize form-select" id="appointment_for" name="type" required>
+                            <select  class="text-capitalize form-select" id="appointment_for" name="type" required>
+                                <option value="" selected disabled class="text-capitalize">select appointment</option>
                                 @foreach(\App\Enums\AppointmentType::cases() as $type)
                                     <option class="text-capitalize" value="{{$type->value}}">{{$type->value}}</option>
                                 @endforeach
@@ -96,14 +97,14 @@
                             
                             <div class="col-6 ps-0 position-relative">
                                 <label for="start">Start</label>
-                                <select disabled class="form-select" id="start" name="start" required>
+                                <select   disabled class="form-select" id="start" name="start" required>
                                     <option selected disabled>Select time</option>
                                 </select>
                             </div>
 
                             <div class="col-6 pe-0">
                                 <label for="end">End</label>
-                                <select disabled class="form-select" id="end" name="end" required>
+                                <select  disabled class="form-select" id="end" name="end" required>
                                     <option selected disabled>Select time</option>
                                 </select>
                             </div>
@@ -182,6 +183,27 @@
 
             e.preventDefault();
 
+            if(!start.value || start.value == 'Select Text' || !end.value ||  end.value == 'Select Text'){
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Please select appointment time',
+                    icon: 'error',
+                    confirmButtonText: 'Close',
+                })
+
+                return
+            }
+
+            if(appoinmentType.value == '' ){
+                swal.fire({
+                    title: 'Error!',
+                    text: 'Please select appointment type',
+                    icon: 'error',
+                    confirmButtonText: 'Close'
+                })
+                return;
+            }
+
             if (!date.value) {
                 Swal.fire({
                     title: 'Error!',
@@ -231,7 +253,19 @@
                 return
             }
 
-            if(isWithinLunchWindow(start.value, end.value) && appoinmentType.value?.toLowerCase() === 'visit'){
+            if(timeToMinutes(start.value) > timeToMinutes(end.value) || timeToMinutes(start.value) == timeToMinutes(end.value)){
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Invalid time selected',
+                    icon: 'error',
+                    confirmButtonText: 'Close',
+                })
+
+                start.value = null;
+                end.value = null;
+            }
+
+            if(isWithinLunchWindow(start.value, end.value) && appoinmentType.value?.toLowerCase() === 'visitation for children'){
                  Swal.fire({
                     title: 'Error!',
                     text: 'Invalid Slot Selection 9:30 am - 1:00 pm is unavailable',
@@ -256,7 +290,6 @@
             end.innerHTML = null;
 
             const basicOption = {
-                value: null,
                 text: 'Select Text',
                 selected: true,
                 disabled: true,
@@ -272,9 +305,13 @@
 
             function createOptionTag({value,text,selected = false, disabled = false}, parentElement){
 
+                
                 const optionTag = document.createElement('option');
 
-                optionTag.value = value;
+                if(value){
+                    optionTag.value = value;                    
+                }
+
                 optionTag.text = text;
                 optionTag.disabled = disabled;
                 optionTag.selected = selected;

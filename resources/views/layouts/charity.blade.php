@@ -181,21 +181,21 @@
             <div class="collapse navbar-collapse justify-content-end bg-white" id="navbarNav">
                 <ul class="navbar-nav me-3 gap-2">
                     <li class="nav-item {{ Request::is('charity') ? 'active-page' : '' }}">
-                        <a class="nav-link text-primary" href="/charity">Home</a></li>
+                        <a style="width: 120px" class="text-center nav-link text-primary" href="/charity">Home</a></li>
                     <!-- <li class="nav-item {{ Request::is('charity/announcements') ? 'active-page' : '' }}">
                         <a class="nav-link text-primary" href="/charity/announcements">Announcement</a>
                     </li>
                     <li class="nav-item {{ Request::is('charity/events') ? 'active-page' : '' }}">
                         <a class="nav-link text-primary" href="/charity/events">Social Events</a></li> -->
                     <li class="nav-item {{ Request::is('charity/contact-us') ? 'active-page' : '' }}">
-                        <a class="nav-link text-primary" href="/charity/contact-us">Contact</a>
+                        <a style="width: 120px" class="text-center nav-link text-primary" href="/charity/contact-us">Contact</a>
                     </li>
                     <!-- <li class="nav-item {{ Request::is('charity/about-us') ? 'active-page' : '' }}">
                         <a class="nav-link text-primary" href="/charity/about-us">About</a>
                     </li> -->
                 </ul>
                 <div class="d-none d-lg-block">
-                    <a href="/charity/appointment" class="btn {{ Request::is('charity/appointment') ? 'active-page' : '' }} text-white px-4 py-3 rounded-0">Appointment</a>
+                    <a style="width: 120px" href="/charity/appointment" class="btn {{ Request::is('charity/appointment') ? 'active-page' : '' }} text-white">Appointment</a>
                 </div>
             </div>
         </div>
