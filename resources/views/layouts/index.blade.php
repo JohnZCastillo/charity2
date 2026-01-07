@@ -21,8 +21,11 @@
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{{asset('/css/flatly-bootstrap.min.css') }}" >
+
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> --}}
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
             integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
@@ -87,16 +90,22 @@
                         <a class="nav-link" aria-current="page" href="/inventory/dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/inventory/items">Items</a>
+                        <a class="nav-link" aria-current="page" href="/inventory/items">Commodities</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/inventory/donors">Donors</a>
+                        <a class="nav-link" aria-current="page" href="/inventory/donors">Benefactors</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/inventory/recipients">Recipients</a>
+                        <a class="nav-link" aria-current="page" href="/inventory/recipients">Beneficiaries</a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/inventory/donation-drive">Donation Drive</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="/inventory/announcements">Announcements</a>
+                    </li>
+                      <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/inventory/inquiries">Inquiries</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="/inventory/events">Events</a>
@@ -105,10 +114,13 @@
                         <a class="nav-link" aria-current="page" href="/inventory/appointments">Appointments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/inventory/appointment-slot">Appointment Slot</a>
+                        <a class="nav-link" aria-current="page" href="/inventory/form/list">Form Builder</a>
                     </li>
+                      <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ route('activity-logs.index') }}">Activity Logs</a>
+                    </li>  
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/inventory/donation-drive">Donation Drive</a>
+                        <a class="nav-link" aria-current="page" href="/inventory/editor">Editor</a>
                     </li>
                     @can('view',\Illuminate\Support\Facades\Auth::user())
                         <li class="nav-item">
@@ -144,23 +156,32 @@
                        href="/inventory/items">
                         <i class="bx bx-sm bx-package"></i>
 
-                        <span class="d-none d-lg-block">Items</span>
+                        <span class="d-none d-lg-block">Commodities</span>
                     </a>
                 </li>
                 <li class="link {{ request()->is('inventory/donors') ? 'active' : '' }}">
                     <a class="list-group-item list-group-item-action bg-transparent border-0 d-flex align-items-center gap-2"
                        href="/inventory/donors">
                         <i class="bx bx-sm bx-user-check"></i>
-                        <span class="d-none d-lg-block">Donors</span>
+                        <span class="d-none d-lg-block">Benefactors</span>
                     </a>
                 </li>
                 <li class="link {{ request()->is('inventory/recipients') ? 'active' : '' }}">
                     <a class="list-group-item list-group-item-action bg-transparent border-0 d-flex align-items-center gap-2"
                        href="/inventory/recipients">
                         <i class="bx bx-sm bx-user-minus"></i>
-                        <span class="d-none d-lg-block">Recipients</span>
+                        <span class="d-none d-lg-block">Beneficiares</span>
                     </a>
                 </li>
+
+                <li class="link {{ request()->is('inventory/donation-drive') ? 'active' : '' }}">
+                    <a class="list-group-item list-group-item-action bg-transparent border-0 d-flex align-items-center gap-2"
+                       href="/inventory/donation-drive">
+                        <i class='bx bx-sm bx-donate-heart'></i>
+                        <span class="d-none d-lg-block">Donation Drive</span>
+                    </a>
+                </li>
+
                 <li class="link {{ request()->is('inventory/announcements') ? 'active' : '' }}">
 
                     <a class="list-group-item list-group-item-action bg-transparent border-0 d-flex align-items-center gap-2"
@@ -169,6 +190,7 @@
                         <span class="d-none d-lg-block">Announcements</span>
                     </a>
                 </li>
+
                 <li class="link {{ request()->is('inventory/inquiries') ? 'active' : '' }}">
 
                     <a class="list-group-item list-group-item-action bg-transparent border-0 d-flex align-items-center gap-2"
@@ -193,20 +215,42 @@
                         <span class="d-none d-lg-block">Appointments</span>
                     </a>
                 </li>
-                <li class="link {{ request()->is('inventory/appointment-slot') ? 'active' : '' }}">
+            
+                {{-- <li class="link {{ request()->is('inventory/appointment-slot') ? 'active' : '' }}">
                     <a class="list-group-item list-group-item-action bg-transparent border-0 d-flex align-items-center gap-2"
                        href="/inventory/appointment-slot">
                         <i class='bx bx-sm bx-calendar-edit'></i>
                         <span class="d-none d-lg-block">Appointment Slot</span>
                     </a>
-                </li>
-                <li class="link {{ request()->is('inventory/donation-drive') ? 'active' : '' }}">
+                </li> --}}
+
+                 <!-- FORM GENERATION -->
+                <li class="link {{ request()->is('/inventory/form/list') ? 'active' : '' }}">
                     <a class="list-group-item list-group-item-action bg-transparent border-0 d-flex align-items-center gap-2"
-                       href="/inventory/donation-drive">
-                        <i class='bx bx-sm bx-donate-heart'></i>
-                        <span class="d-none d-lg-block">Donation Drive</span>
+                    href="/inventory/form/list">
+                        <i class='bx bx-sm bx-file'></i> <!-- Icon for form generation (e.g., file) -->
+                        <span class="d-none d-lg-block">Form Builder</span>
                     </a>
                 </li>
+
+                <li class="link {{ request()->routeIs('activity-logs.index') ? 'active' : '' }}">
+                    <a class="list-group-item list-group-item-action bg-transparent border-0 d-flex align-items-center gap-2"
+                    href="{{ route('activity-logs.index') }}">
+                        <i class='bx bx-history bx-sm'></i>
+                        <span class="d-none d-lg-block">Activity Log</span>
+                    </a>
+                </li>
+
+
+                <li class="link {{ request()->is('inventory/editor') ? 'active' : '' }}">
+                    <a class="list-group-item list-group-item-action bg-transparent border-0 d-flex align-items-center gap-2"
+                       href="/inventory/editor">
+                        <i class='bx bx-sm bx-edit'></i>
+                        <span class="d-none d-lg-block">Editor</span>
+                    </a>
+                </li>
+
+              
                 @can('view',\Illuminate\Support\Facades\Auth::user())
                     <li class="link {{ request()->is('inventory/users') ? 'active' : '' }}">
                         <a class="list-group-item list-group-item-action bg-transparent border-0 d-flex align-items-center gap-2"
@@ -223,31 +267,11 @@
                         <span class="d-none d-lg-block">Account</span>
                     </a>
                 </li>
-                 <li class="link {{ request()->is('inventory/editor') ? 'active' : '' }}">
-                    <a class="list-group-item list-group-item-action bg-transparent border-0 d-flex align-items-center gap-2"
-                       href="/inventory/editor">
-                        <i class='bx bx-sm bx-edit'></i>
-                        <span class="d-none d-lg-block">Editor</span>
-                    </a>
-                </li>
+             
 
-                <!-- FORM GENERATION -->
-                <li class="link {{ request()->is('/inventory/form/list') ? 'active' : '' }}">
-                    <a class="list-group-item list-group-item-action bg-transparent border-0 d-flex align-items-center gap-2"
-                    href="/inventory/form/list">
-                        <i class='bx bx-sm bx-file'></i> <!-- Icon for form generation (e.g., file) -->
-                        <span class="d-none d-lg-block">Form Generator</span>
-                    </a>
-                </li>
+               
                 <!-- ACTIVITY LOGS -->
-              <li class="link {{ request()->routeIs('activity-logs.index') ? 'active' : '' }}">
-                <a class="list-group-item list-group-item-action bg-transparent border-0 d-flex align-items-center gap-2"
-                href="{{ route('activity-logs.index') }}">
-                    <i class='bx bx-history bx-sm'></i>
-                    <span class="d-none d-lg-block">Activity Log</span>
-                </a>
-            </li>
-
+            
             </ul>
         </aside>
         <section class="flex-fill px-0 h-100" style="min-width: 0">

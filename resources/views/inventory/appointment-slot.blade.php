@@ -71,7 +71,11 @@
         @endif
 
         <!-- Action Button -->
-        <div class="d-flex justify-content-end mb-3">
+        <div class="d-flex justify-content-between mb-3">
+
+            <button class="btn btn-secondary" onclick="back()">Back</button>
+
+
             <button type="button" class="btn btn-primary btn-custom shadow-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <i class="bi bi-calendar-x"></i> Block Date
             </button>

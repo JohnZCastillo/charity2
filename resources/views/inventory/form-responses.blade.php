@@ -61,7 +61,7 @@
         </div>
     </form>
 
-    <div class="mb-3">
+    {{-- <div class="mb-3">
         <label class="form-label fw-semibold">Filter by Question:</label>
         <select class="form-select" id="questionFilter" onchange="filterCharts()">
             <option value="all">All Questions</option>
@@ -69,7 +69,7 @@
                 <option value="{{ 'chart_' . md5($key) }}">{{ $key }}</option>
             @endforeach
         </select>
-    </div>
+    </div> --}}
 
     @php
         $filtered = $form->responses->filter(function($r) {

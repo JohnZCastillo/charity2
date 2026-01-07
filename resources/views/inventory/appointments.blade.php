@@ -15,6 +15,8 @@
         <div class="d-flex align-items-center gap-1 mx-0 flex-wrap flex-md-nowrap">
             <input id="searchInput" value="{{$app->request->search}}" placeholder="Search"
                    type="search" name="search" class="form-control">
+
+            <a href="/inventory/appointment-slot" class="ms-auto d-block btn btn-secondary text-nowrap">Appointment Slot</a>
         </div>
 
          <input type="hidden" name="hiddenFilter" id="hiddenFilter" class="d-none">
@@ -65,7 +67,6 @@
                 </select>
             </div>
 
-            <a href="/inventory/appointment-slot" class="ms-auto d-block btn btn-secondary">Appointment Slost</a>
         </div>
     </form>
 
@@ -110,17 +111,17 @@
                     <td>{{$appointment->end}}</td>
                     <td>
                         @if($appointment->status == 'pending')
-                            <span class="badge bg-warning text-dark">Pending</span>
+                            <span class="badge bg-warning text-dark" style="width: 105px">Pending</span>
                         @elseif($appointment->status == 'rescheduled')
-                            <span class="badge bg-dark">Rescheduled</span>
+                            <span class="badge bg-dark" style="width: 105px">Rescheduled</span>
                         @elseif($appointment->status == 'confirmed')
-                            <span class="badge bg-info">Confirmed</span>
+                            <span class="badge bg-info" style="width: 105px">Confirmed</span>
                         @elseif($appointment->status == 'cancelled')
-                            <span class="badge bg-secondary">Cancelled</span>
+                            <span class="badge bg-secondary" style="width: 105px">Cancelled</span>
                         @elseif($appointment->status == 'done')
-                            <span class="badge bg-success">Accomplished</span>
+                            <span class="badge bg-success" style="width: 105px">Accomplished</span>
                         @elseif($appointment->status == 'undone')
-                            <span class="badge bg-danger">Unaccomplished</span>
+                            <span class="badge bg-danger" style="width: 105px">Unaccomplished</span>
                         @endif
                     </td>
                     <td class="d-flex gap-1">
