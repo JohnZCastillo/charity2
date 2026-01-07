@@ -66,6 +66,10 @@
         .link:hover {
             background-color: #f1faee
         }
+
+        .form-check-input{
+            border: 1px solid black !important;
+        }
     </style>
 
     <!-- font awesome cdn -->

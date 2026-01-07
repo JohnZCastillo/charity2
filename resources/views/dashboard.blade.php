@@ -102,7 +102,12 @@
                         <div class="row mt-5 mb-4">
                             <div class="col-md-4">
                                 <div class="box">
-                                    <div id="bar"></div>
+                                    <div id="bar"> 
+                                        
+                                        <div class='d-flex justify-content-center align-items-center'>
+                                            <span class="text-secondary fs-1" >No Donation History Yet</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -654,82 +659,85 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        new ApexCharts(document.querySelector("#spark1"), spark1).render();
+        new ApexCharts(document.querySelector("#spark1"), spark1).render();            
 
-        var optionsBar = {
-            chart: {
-                type: 'bar',
-                height: 380,
-                width: '100%',
-                stacked: true,
-            },
-            plotOptions: {
-                bar: {
-                    columnWidth: '45%',
-                }
-            },
-            colors: colorPalette,
-            series: [{
-                name: "Donation",
-                data: @json(array_map(fn($value)=>$value->total,$donatedItemHistory)),
-            }],
-            labels: @json(array_map(fn($value)=>$value->name,$donatedItemHistory)),
-            xaxis: {
-                labels: {
-                    show: true,
-                    formatter: function (val) {
-                        const array = val.split(" ");
-
-                        if(array.length > 1 ){
-
-                            const shortcut = array.reduce((prev,current) => {
-                                return prev + current.split("")[0];
-                            }, "")
-
-                            return `${array[0]} (${shortcut})`;
-                        }
-
-                        return array[0];
+        @if (count($donatedItemHistory) > 0)
+            var optionsBar = {
+                chart: {
+                    type: 'bar',
+                    height: 380,
+                    width: '100%',
+                    stacked: true,
+                },
+                plotOptions: {
+                    bar: {
+                        columnWidth: '45%',
                     }
                 },
-                axisBorder: {
-                    show: false
-                },
-                axisTicks: {
-                    show: false
-                },
-            },
-            yaxis: {
-                axisBorder: {
-                    show: false
-                },
-                axisTicks: {
-                    show: false
-                },
-                labels: {
-                    style: {
-                        colors: '#78909c'
+                colors: colorPalette,
+                series: [{
+                    name: "Donation",
+                    data: @json(array_map(fn($value)=>$value->total,$donatedItemHistory)),
+                }],
+                labels: @json(array_map(fn($value)=>$value->name,$donatedItemHistory)),
+                xaxis: {
+                    labels: {
+                        show: true,
+                        formatter: function (val) {
+                            const array = val.split(" ");
+
+                            if(array.length > 1 ){
+
+                                const shortcut = array.reduce((prev,current) => {
+                                    return prev + current.split("")[0];
+                                }, "")
+
+                                return `${array[0]} (${shortcut})`;
+                            }
+
+                            return array[0];
+                        }
                     },
-                }
-            },
-            title: {
-                text: 'Donation History',
-                align: 'left',
-                style: {
-                    fontSize: '18px'
-                }
-            },
-            tooltip: {
-                x: {
-                    formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
-                        return value
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false
+                    },
+                },
+                yaxis: {
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false
+                    },
+                    labels: {
+                        style: {
+                            colors: '#78909c'
+                        },
+                    }
+                },
+                title: {
+                    text: 'Donation History',
+                    align: 'left',
+                    style: {
+                        fontSize: '18px'
+                    }
+                },
+                tooltip: {
+                    x: {
+                        formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
+                            return value
+                        }
                     }
                 }
             }
-        }
 
-        var chartBar = new ApexCharts(document.querySelector('#bar'), optionsBar);
-        chartBar.render();
+            var chartBar = new ApexCharts(document.querySelector('#bar'), optionsBar);
+            
+            chartBar.render();
+        @endif
 
 
         var optionsBar2 = {

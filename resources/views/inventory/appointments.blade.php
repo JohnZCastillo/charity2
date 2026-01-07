@@ -71,7 +71,7 @@
     </form>
 
     <h5 class="mt-3">Appointments</h5>
-    <div class="table-responsive mb-4">
+    <div class="table-responsive mb-4 min-vh-100">
         <table class="table table-hover table-bordered align-middle">
             <thead class="table-light">
             <tr>
@@ -109,6 +109,7 @@
                     <td>{{$appointment->date}}</td>
                     <td>{{$appointment->start}}</td>
                     <td>{{$appointment->end}}</td>
+                    
                     <td>
                         @if($appointment->status == 'pending')
                             <span class="badge bg-warning" style="width: 105px">Pending</span>
@@ -124,8 +125,64 @@
                             <span class="badge bg-danger" style="width: 105px">Unaccomplished</span>
                         @endif
                     </td>
-                    <td class="d-flex gap-1">
-                        @if($appointment->status == 'pending')
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Action
+                            </button>
+                            <ul class="dropdown-menu">
+                                @if($appointment->status == 'pending')
+                                    <li>
+                                        <form class="w-100"   method="POST" action="{{ route('appointments.confirm', $appointment->id) }}">
+                                            @csrf
+                                            <button class='dropdown-item text-start'>
+                                                Confirm
+                                            </button>
+                                        </form>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="#"
+                                            class="w-100 dropdown-item text-start sendReply"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#replyModal"
+                                            data-id="{{ $appointment->id }}"
+                                            data-email="{{ $appointment->email }}">
+                                                Reschedule      
+                                        </a>
+                                    </li>
+                                    <li>
+                                    <a href="#"
+                                            class="w-100 dropdown-item text-start sendCancelReply"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#cancelModal"
+                                            data-id="{{ $appointment->id }}"
+                                            data-email="{{ $appointment->email }}">
+                                                Cancel
+                                        </a>
+                                    </li>
+                                @elseif($appointment->status == 'confirmed')
+                                    <li>
+                                        <form class="w-100" method="POST" action="{{ route('appointments.done', $appointment->id) }}">
+                                            @csrf
+                                            <button class="dropdown-item text-start">Accomplished</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form class='w-100' method="POST" action="{{ route('appointments.undone', $appointment->id) }}">
+                                            @csrf
+                                            <button class="dropdown-item text-start">Unaccomplished</button>
+                                        </form>
+                                    </li>
+                                @else
+                                    <li>
+                                        <button disabled class="dropdown-item text-start">No Action Needed</button>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+
+                        {{-- @if($appointment->status == 'pending')
                             <!-- Confirm -->
                             <form method="POST" action="{{ route('appointments.confirm', $appointment->id) }}">
                                 @csrf
@@ -172,13 +229,12 @@
                                
                                 <button  style="width: 120px;" class="btn btn-sm btn-danger">Unaccomplished</button>
                             </form>
-                        @endif
+                        @endif --}}
                     </td>
-                
                 </tr>
             @empty
                 <tr>
-                    <td colspan="10" class="text-center text-secondary">No Appointments</td>
+                    <td colspan="11" class="text-center text-secondary">No Appointments</td>
                 </tr>
             @endforelse
             </tbody>
