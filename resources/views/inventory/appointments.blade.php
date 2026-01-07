@@ -131,7 +131,7 @@
                                 @csrf
                                 <button 
                                     class="btn btn-sm btn-primary"
-                                    style="width: 110px;"
+                                    style="width: 120px;"
                                 >
                                     Confirm
                                 </button>
@@ -139,7 +139,7 @@
 
                             <a href="#"
                                 class="btn btn-sm btn-secondary sendReply"
-                                style="width: 110px;"
+                                style="width: 120px;"
                                 data-bs-toggle="modal"
                                 data-bs-target="#replyModal"
                                 data-id="{{ $appointment->id }}"
@@ -150,7 +150,7 @@
                             
                             <a href="#"
                                 class="btn btn-sm btn-danger sendCancelReply"
-                                style="width: 110px;"
+                                style="width: 120px;"
                                 data-bs-toggle="modal"
                                 data-bs-target="#cancelModal"
                                 data-id="{{ $appointment->id }}"
@@ -163,14 +163,14 @@
                             <!-- Done -->
                             <form method="POST" action="{{ route('appointments.done', $appointment->id) }}">
                                 @csrf
-                                <button style="width: 110px;" class="btn btn-sm btn-success">Accomplished</button>
+                                <button style="width: 120px;" class="btn btn-sm btn-success">Accomplished</button>
                             </form>
 
                             <!-- Unaccomplished -->
                             <form method="POST" action="{{ route('appointments.undone', $appointment->id) }}">
                                 @csrf
                                
-                                <button  style="width: 110px;" class="btn btn-sm btn-danger">Unaccomplished</button>
+                                <button  style="width: 120px;" class="btn btn-sm btn-danger">Unaccomplished</button>
                             </form>
                         @endif
                     </td>
