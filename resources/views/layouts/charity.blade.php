@@ -195,7 +195,7 @@
                     </li> -->
                 </ul>
                 <div class="d-none d-lg-block">
-                    <a href="/charity/appointment" class="btn btn-success text-white px-4 py-3 rounded-0">Appointment</a>
+                    <a href="/charity/appointment" class="btn {{ Request::is('charity/appointment') ? 'active-page' : '' }} text-white px-4 py-3 rounded-0">Appointment</a>
                 </div>
             </div>
         </div>

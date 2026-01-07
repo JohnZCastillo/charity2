@@ -232,9 +232,8 @@
             <thead class="table-success">
                 <tr>
                     <th>Date</th>
-                    <th>Contributor</th>
+                    <th>Donor</th>
                     <th>Food Item / Goods</th>
-                    <th>Quantity</th>
                     <th>Donation Type</th>
                 </tr>
             </thead>
@@ -346,7 +345,7 @@
        <div class="row">
             @foreach ($home->section_cards ?? [] as $card)
                 <div class="mb-2 col-12 col-lg-4">
-                    <div class="h-100 text-center {{ $loop->index === 1 ? 'bg-success rounded p-2' : '' }}">
+                    <div class="h-100 text-center  rounded p-2 {{ $loop->index === 1 ? 'bg-success' : '' }}">
                         <div class="{{ $loop->index === 1 ? 'text-white' : 'text-primary' }}">
                             <h5 class="fw-bold mb-3">{{ $card['title'] ?? 'Untitled' }}</h5>
                             <p class="{{ $loop->index === 1 ? '' : 'text-secondary' }}">
@@ -572,7 +571,6 @@
                                 <td>${log.date}</td>
                                 <td>${log.contributor_name}</td>
                                 <td>${log.item}</td>
-                                <td>${log.quantity}</td>
                                 <td>${log.donation_type}</td>
                             </tr>
                         `);

@@ -61,7 +61,7 @@
         </div>
     </form>
 
-    <div class="mb-3">
+    {{-- <div class="mb-3">
         <label class="form-label fw-semibold">Filter by Question:</label>
         <select class="form-select" id="questionFilter" onchange="filterCharts()">
             <option value="all">All Questions</option>
@@ -69,7 +69,7 @@
                 <option value="{{ 'chart_' . md5($key) }}">{{ $key }}</option>
             @endforeach
         </select>
-    </div>
+    </div> --}}
 
     @php
         $filtered = $form->responses->filter(function($r) {
@@ -105,40 +105,42 @@
             <div class="card-body scrollable-table p-0">
                 <table class="table table-hover table-sm mb-0" id="responsesTable">
                     <thead class="table-light">
-                        <tr><th>#</th><th>Submitted</th><th>Answers</th></tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Submitted</th>
+                            @foreach($form->labels() as $label)
+                                 <th>{{$label}}</th>
+                            @endforeach
+                        </tr>
                     </thead>
                     <tbody>
                         @forelse($responses as $i => $res)
                             <tr>
                                 <td>{{ $i + 1 }}</td>
                                 <td>{{ $res->created_at->format('Y-m-d h:i A') }}</td>
-                                <td>
-                                    <ul class="mb-0 ps-3">
-                                        @foreach($res->response as $k => $v)
-                                            <li>
-                                                <strong>{{ $k }}:</strong>
-                                                @if(is_string($v) && str_starts_with($v, 'forms/'))
-                                                    @php
-                                                        $ext = strtolower(pathinfo($v, PATHINFO_EXTENSION));
-                                                        $isImage = in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']);
-                                                        $fileUrl = asset($v);
-                                                    @endphp
-                                                    @if($isImage)
-                                                        <br><img src="{{ $fileUrl }}" class="img-thumbnail mt-2" style="max-width: 150px;">
-                                                        <div><a href="{{ $fileUrl }}" target="_blank">View Full Image</a></div>
-                                                    @else
-                                                        <br><a href="{{ $fileUrl }}" class="btn btn-sm btn-outline-primary mt-1" target="_blank">
-                                                            <i class="fa fa-download"></i> Download File
-                                                        </a>
-                                                    @endif
-                                                @elseif(is_array($v))
-                                                    {{ implode(', ', $v) }}
-                                                @else
-                                                    {{ $v }}
-                                                @endif
-                                            </li>
-                                        @endforeach
-                                    </ul>
+                                @foreach($res->response as $k => $v)
+                                    <td>
+                                            @if(is_string($v) && str_starts_with($v, 'forms/'))
+                                            @php
+                                                $ext = strtolower(pathinfo($v, PATHINFO_EXTENSION));
+                                                $isImage = in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']);
+                                                $fileUrl = asset($v);
+                                            @endphp
+                                            @if($isImage)
+                                                <br><img src="{{ $fileUrl }}" class="img-thumbnail mt-2" style="max-width: 150px;">
+                                                <div><a href="{{ $fileUrl }}" target="_blank">View Full Image</a></div>
+                                            @else
+                                                <br><a href="{{ $fileUrl }}" class="btn btn-sm btn-outline-primary mt-1" target="_blank">
+                                                    <i class="fa fa-download"></i> Download File
+                                                </a>
+                                            @endif
+                                        @elseif(is_array($v))
+                                            {{ implode(', ', $v) }}
+                                        @else
+                                            {{ $v }}
+                                        @endif
+                                    </td>
+                                @endforeach
                                 </td>
                             </tr>
                         @empty
@@ -151,68 +153,6 @@
     @endforeach
 
     <button class="btn btn-dark mb-4" onclick="downloadAllChartsAsPDF()">Download All Charts as PDF</button>
-
-    @foreach($aggregated as $label => $data)
-        @php
-            $labels = array_keys($data);
-            $counts = array_values($data);
-            $chartId = 'chart_' . md5($label);
-        @endphp
-
-        <div class="card mb-4 chart-wrapper shadow-sm border-0" id="{{ $chartId }}_wrapper">
-            <div class="card-header d-flex justify-content-between align-items-center bg-light">
-                <strong class="text-dark">{{ $label }}</strong>
-                <div class="d-flex gap-2">
-                    <select class="form-select form-select-sm" onchange="toggleChartType_{{ $chartId }}(this)">
-                        <option value="bar">Bar</option>
-                        <option value="pie">Pie</option>
-                        <option value="line">Line</option>
-                    </select>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="downloadChart('{{ $chartId }}', 'png')">
-                        <i class="fa fa-image"></i>
-                    </button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="downloadChart('{{ $chartId }}', 'pdf')">
-                        <i class="fa fa-file-pdf"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="card-body chart-container">
-                <canvas id="{{ $chartId }}_canvas"></canvas>
-            </div>
-        </div>
-
-        <script>
-            const ctx_{{ $chartId }} = document.getElementById('{{ $chartId }}_canvas');
-            const chartData_{{ $chartId }} = {
-                labels: @json($labels),
-                datasets: [{
-                    label: 'Responses',
-                    data: @json($counts),
-                    backgroundColor: ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f', '#edc948', '#b07aa1', '#ff9da7', '#9c755f', '#bab0ab'],
-                    borderColor: '#fff',
-                    borderWidth: 1
-                }]
-            };
-
-            let chartInstance_{{ $chartId }} = new Chart(ctx_{{ $chartId }}, {
-                type: 'bar',
-                data: chartData_{{ $chartId }},
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true } } }
-            });
-
-            function toggleChartType_{{ $chartId }}(select) {
-                const type = select.value;
-                if (chartInstance_{{ $chartId }}.config.type !== type) {
-                    chartInstance_{{ $chartId }}.destroy();
-                    chartInstance_{{ $chartId }} = new Chart(ctx_{{ $chartId }}, {
-                        type: type,
-                        data: chartData_{{ $chartId }},
-                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true } } }
-                    });
-                }
-            }
-        </script>
-    @endforeach
 </div>
 
 <button onclick="topFunction()" id="backToTop" title="Go to top">

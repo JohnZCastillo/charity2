@@ -96,14 +96,14 @@
                                 @endif
 
                                 <!-- Delete Button -->
-                                <form action="{{ route('inquiries.destroy', $inquiry->id) }}" method="POST" class="m-2" 
+                                {{-- <form action="{{ route('inquiries.destroy', $inquiry->id) }}" method="POST" class="m-2" 
                                     onsubmit="return confirm('Are you sure you want to delete this inquiry?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger">
                                         <i class="fas fa-trash"></i> Delete
                                     </button>
-                                </form>
+                                </form> --}}
                             </td>
                         </tr>
                     @endforeach

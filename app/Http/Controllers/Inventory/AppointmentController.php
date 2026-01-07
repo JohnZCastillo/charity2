@@ -37,44 +37,34 @@ class AppointmentController extends Controller
             ->when($request->input('order'), function ($qb) use ($request) {
                 $qb->orderBy($request->input('order'), $request->input('sort'));
             })
-             ->when($request->input('order'), function ($qb) use ($request) {
-                $qb->orderBy($request->input('order'), $request->input('sort'));
-            })
-            ->paginate(10)
-            ->appends($request->except('page'));
-
-        $completedAppointments = Appointment::whereIn('status',['done','undone'] )
             ->when($request->input('search'), function ($qb) use ($request) {
                 $qb->where(function ($qb) use ($request) {
                     $qb->orWhereLike('name', '%' . $request->input('search') . '%');
                     $qb->orWhereLike('email', '%' . $request->input('search') . '%');
                 });
             })
-            ->when($request->input('hiddenFilter'), function ($qb) use ($request) {
+            ->when($request->input('type'), function ($qb) use ($request) {
                 $qb->where(function ($qb) use ($request) {
 
-                    if( in_array($request->input('hiddenFilter'),['meeting','visit','asking for help','others','donation'])){
-                       $qb->where('type',$request->input('hiddenFilter'));
-                    }else if(in_array($request->input('hiddenFilter'), ['done','undone'])){
-                       $qb->where('status',$request->input('hiddenFilter'));
-                    }
+                    $qb->where('type', $request->input('type'));
 
-                    // $qb->where('type',$request->input('hiddenFilter'));
-                //     $qb->orWhereLike('email', '%' . $request->input('search') . '%');
+                    // if( in_array($request->input('hiddenFilter'),['meeting','visit','asking for help','others','donation'])){
+                    //    $qb->where('type',$request->input('hiddenFilter'));
+                    // }else if(in_array($request->input('hiddenFilter'), ['done','undone'])){
+                    //    $qb->where('status',$request->input('hiddenFilter'));
+                    // }
                 });
             })
-            ->when($request->input('order'), function ($qb) use ($request) {
-                $qb->orderBy($request->input('order'), $request->input('sort'));
-            })
-             ->when($request->input('order'), function ($qb) use ($request) {
-                $qb->orderBy($request->input('order'), $request->input('sort'));
+             ->when($request->input('status'), function ($qb) use ($request) {
+                $qb->where(function ($qb) use ($request) {
+                    $qb->where('status',$request->input('status'));
+                });
             })
             ->paginate(10)
             ->appends($request->except('page'));
 
         return view('inventory.appointments', [
             'appointments' => $appointments,
-            'completedAppointments' => $completedAppointments
         ]);
     }
 

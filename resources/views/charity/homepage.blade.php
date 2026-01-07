@@ -226,7 +226,7 @@
                         <thead class="table-success">
                             <tr>
                                 <th>Date</th>
-                                <th>Contributor</th>
+                                <th>Donor</th>
                                 <th>Food Item / Goods</th>
                                 <th>Donation Type</th>
                             </tr>
@@ -326,10 +326,10 @@
         <div class="row g-4">
             @foreach ($home->section_cards ?? [] as $card)
                 <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card h-100 shadow-sm {{ $loop->index === 1 ? 'bg-success text-white' : '' }}">
+                    <div class="card h-100 shadow-sm"  style="background-color: #dad8c3;">
                         <div class="card-body text-center">
                             <h5 class="card-title fw-bold mb-3">{{ $card['title'] ?? 'Untitled' }}</h5>
-                            <p class="card-text {{ $loop->index !== 1 ? 'text-secondary' : '' }}">
+                            <p class="card-text">
                                 {{ $card['description'] ?? '' }}
                             </p>
                         </div>
