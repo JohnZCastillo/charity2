@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Enums\AppointmentType;
 use App\Models\Appointment;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -29,11 +30,17 @@ class SlotFinder
             ->get()
             ->toArray();
 
-            if(strtolower($appoinmentType) == 'visit'){
+            if($appoinmentType == AppointmentType::VISIT->value){
+
                 array_push($appointments, [
                     'start' =>  '10:30',
                     'end' =>  '13:00'
-                ]);
+                ],
+                [
+                    'start' =>  '14:30',
+                    'end' =>  '17:00'
+                ]
+            );
             }
 
         foreach ($period as $date) {
