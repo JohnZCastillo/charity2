@@ -53,7 +53,7 @@ Route::prefix('inventory')->middleware(['auth'])->group(function () {
 
     Route::get('/donors', [DonorController::class, 'index']);
     Route::get('/donors/{donorID}', [DonorController::class, 'getDonor'])->name('donor.get');
-    Route::post('/donor/update/{donorID}', [DonorController::class, 'updateDonor'])->name('donor.update');
+    Route::patch('/donor/update/{donorID}', [DonorController::class, 'updateDonor'])->name('donor.update');
     Route::delete('/donor/{donorID}', [DonorController::class, 'deleteDonor'])->name('donor.delete');
     Route::post('/donor/add', [DonorController::class, 'addDonor'])->name('donor.add');
 

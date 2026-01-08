@@ -17,7 +17,7 @@
 
         <div class="p-2 w-75 mx-auto">
 
-            <form class="form" method="POST" action="/inventory/donors/{{$donor->id}}">
+            <form class="form" method="POST" action="/inventory/donor/update/{{$donor->id}}">
                 @csrf
                 @method('PATCH')
 
