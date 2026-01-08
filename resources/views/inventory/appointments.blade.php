@@ -126,61 +126,63 @@
                         @endif
                     </td>
                     <td>
-                        <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Action
-                            </button>
-                            <ul class="dropdown-menu">
-                                @if($appointment->status == 'pending')
-                                    <li>
-                                        <form class="w-100"   method="POST" action="{{ route('appointments.confirm', $appointment->id) }}">
-                                            @csrf
-                                            <button class='dropdown-item text-start'>
-                                                Confirm
-                                            </button>
-                                        </form>
-                                    </li>
-                                    
-                                    <li>
+                        @if($appointment->status == 'pending' || $appointment->status == 'confirmed' )
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Action
+                                </button>
+                                <ul class="dropdown-menu">
+                                    @if($appointment->status == 'pending')
+                                        <li>
+                                            <form class="w-100"   method="POST" action="{{ route('appointments.confirm', $appointment->id) }}">
+                                                @csrf
+                                                <button class='dropdown-item text-start'>
+                                                    Confirm
+                                                </button>
+                                            </form>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="#"
+                                                class="w-100 dropdown-item text-start sendReply"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#replyModal"
+                                                data-id="{{ $appointment->id }}"
+                                                data-email="{{ $appointment->email }}">
+                                                    Reschedule      
+                                            </a>
+                                        </li>
+                                        <li>
                                         <a href="#"
-                                            class="w-100 dropdown-item text-start sendReply"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#replyModal"
-                                            data-id="{{ $appointment->id }}"
-                                            data-email="{{ $appointment->email }}">
-                                                Reschedule      
-                                        </a>
-                                    </li>
-                                    <li>
-                                    <a href="#"
-                                            class="w-100 dropdown-item text-start sendCancelReply"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#cancelModal"
-                                            data-id="{{ $appointment->id }}"
-                                            data-email="{{ $appointment->email }}">
-                                                Cancel
-                                        </a>
-                                    </li>
-                                @elseif($appointment->status == 'confirmed')
-                                    <li>
-                                        <form class="w-100" method="POST" action="{{ route('appointments.done', $appointment->id) }}">
-                                            @csrf
-                                            <button class="dropdown-item text-start">Accomplished</button>
-                                        </form>
-                                    </li>
-                                    <li>
-                                        <form class='w-100' method="POST" action="{{ route('appointments.undone', $appointment->id) }}">
-                                            @csrf
-                                            <button class="dropdown-item text-start">Unaccomplished</button>
-                                        </form>
-                                    </li>
-                                @else
-                                    <li>
-                                        <button disabled class="dropdown-item text-start">No Action Needed</button>
-                                    </li>
-                                @endif
-                            </ul>
-                        </div>
+                                                class="w-100 dropdown-item text-start sendCancelReply"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#cancelModal"
+                                                data-id="{{ $appointment->id }}"
+                                                data-email="{{ $appointment->email }}">
+                                                    Cancel
+                                            </a>
+                                        </li>
+                                    @elseif($appointment->status == 'confirmed')
+                                        <li>
+                                            <form class="w-100" method="POST" action="{{ route('appointments.done', $appointment->id) }}">
+                                                @csrf
+                                                <button class="dropdown-item text-start">Accomplished</button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form class='w-100' method="POST" action="{{ route('appointments.undone', $appointment->id) }}">
+                                                @csrf
+                                                <button class="dropdown-item text-start">Unaccomplished</button>
+                                            </form>
+                                        </li>
+                                    @else
+                                        <li>
+                                            <button disabled class="dropdown-item text-start">No Action Needed</button>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </div>
+                        @endif
 
                         {{-- @if($appointment->status == 'pending')
                             <!-- Confirm -->

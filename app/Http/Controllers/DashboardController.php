@@ -110,16 +110,14 @@ class DashboardController extends Controller
         $endDate = Carbon::now()->endOfMonth()->endOfDay()->format('Y-m-d H:m');
       
         $donatedItemHistory = DB::select("
-            SELECT i.name as name, sum(d.quantity) as total from donations d
+            SELECT i.created_at, i.name as name, sum(d.quantity) as total from donations d
             LEFT JOIN items i on i.id = d.item_id
-            where i.created_at between :start and :end
+            where d.created_at between :start and :end
             group by i.id, i.name
         ",[
             'start' => $startDate,
             'end' => $endDate
         ]);
-
-        // dd($donatedItemHistory);
 
         $itemsCountCategory = Item::select(
             'item_category_id',

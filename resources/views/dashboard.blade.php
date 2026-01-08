@@ -103,10 +103,11 @@
                             <div class="col-md-4">
                                 <div class="box">
                                     <div id="bar"> 
-                                        
-                                        <div class='d-flex justify-content-center align-items-center'>
-                                            <span class="text-secondary fs-1" >No Donation History Yet</span>
-                                        </div>
+                                        @if (count($donatedItemHistory) <= 0)
+                                            <div class='d-flex justify-content-center align-items-center'>
+                                                <span class="text-secondary fs-1" >No Donation History Yet</span>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
