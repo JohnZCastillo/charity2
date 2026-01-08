@@ -81,6 +81,17 @@ class DonorController extends Controller
     }
 }
 
+public function getDonor(Request $request, $donorID)
+    {
+        $donor = Account::findOrFail($donorID);
+
+        return view('inventory.edit-donor', [
+            'donor' => $donor
+        ]);
+    }
+
+    
+
     public function deleteDonor($donorID)
 {
     try {
