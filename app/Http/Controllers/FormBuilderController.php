@@ -171,6 +171,18 @@ class FormBuilderController extends Controller
                 $qb->when($request->query('event_id', false), function($qb) use($request){
                     return $qb->where('event_id', $request->query('event_id'));
                 });
+
+                $qb->when($request->query('orderBy'), function($qb) use($request){
+                    switch($request->query('orderBy')){
+                        case 'newest':
+                            $qb->orderBy('created_at','desc');
+                        break;
+                        case 'oldest':
+                            $qb->orderBy('created_at','asc');
+                        break;
+                    }
+                });
+
             },
         ])->findOrFail($id);
 
@@ -178,6 +190,8 @@ class FormBuilderController extends Controller
              'user_id' => auth()->user()->id,
             'activity' => 'Viewed Form Responses.'
         ]);
+
+        // dd('test');
 
         return view('inventory.form-responses', compact('form'));
     }

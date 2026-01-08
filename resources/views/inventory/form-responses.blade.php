@@ -45,6 +45,15 @@
             <label class="form-label">To</label>
             <input type="date" name="to" value="{{ request('to') }}" class="form-control">
         </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Order</label>
+             <select name="orderBy" class="form-select">
+                <option value="olrdest" {{ request('orderBy') == 'olrdest' ? 'selected' : '' }}>Oldest</option>
+                <option value="newest" {{ request('orderBy') == 'newest' ? 'selected' : '' }}>Newest</option>
+            </select>
+        </div>
+
         <div class="col-md-3">
             <label class="form-label">Group By</label>
             <select name="group" class="form-select">

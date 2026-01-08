@@ -67,7 +67,7 @@
             background-color: #f1faee
         }
 
-        .form-check-input{
+        .form-check-input, .form-control, .form-select{
             border: 1px solid black !important;
         }
     </style>
