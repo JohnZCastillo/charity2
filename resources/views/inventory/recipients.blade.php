@@ -102,7 +102,7 @@
                                     @csrf
                                     @method('DELETE')
                                         <button class="btn btn-danger" type="submit">
-                                            delete
+                                            Archived
                                         </button>
                                     </form>
                                 </div>
