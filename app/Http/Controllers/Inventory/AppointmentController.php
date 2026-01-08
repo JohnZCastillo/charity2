@@ -60,6 +60,7 @@ class AppointmentController extends Controller
                     $qb->where('status',$request->input('status'));
                 });
             })
+            ->orderByRaw("case when appointments.status = 'pending' then 0 when appointments.status = 'confirmed' then 1 else 2 end desc", )
             ->paginate(10)
             ->appends($request->except('page'));
 
