@@ -51,10 +51,6 @@
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab">About Page</button>
         </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="donateus-tab" data-bs-toggle="tab" data-bs-target="#donateus" type="button" role="tab">Donate Page</button>
-        </li>
-        
     </ul>
 
     <div class="tab-content" id="cmsTabContent">
