@@ -13,7 +13,7 @@
             </div>
         @endif
 
-        <h1 class="text-xl font-bold text-gray-700">EDIT RECIPIENT</h1>
+        <h1 class="text-xl font-bold text-gray-700">Edit Recipients</h1>
 
         <div class="p-2 w-75 mx-auto">
 
@@ -21,7 +21,7 @@
                 @csrf
                 @method('PATCH')
 
-                <div class="form-group">
+                <div class="form-group d-none">
                     <label class="label-text">Recipient Code</label>
                     <input value="{{$recipient->code}}" name="code" type="text" class="form-control"/>
                 </div>
