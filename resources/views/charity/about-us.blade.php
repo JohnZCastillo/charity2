@@ -203,15 +203,15 @@
         @if($aboutSections->has('general'))
             @foreach($aboutSections['general']->whereIn('type', ['text','image','list']) as $section)
                 <div 
-                    class="alt-section {{ $loop->iteration % 2 == 0 ? 'flex-row-reverse' : '' }}"
+                    class="row p-5 bg-white shadow rounded mb-3   {{ $loop->iteration % 2 == 0 ? 'flex-row-reverse' : '' }}"
                     data-aos="{{ $loop->iteration % 2 == 0 ? 'fade-left' : 'fade-right' }}"
                 >
-                    <div class="image-wrapper">
+                    <div class="col-sm col-md-6 image-wrapper">
                         @if($section->image)
                             <img src="{{ $section->image }}" alt="{{ $section->title }}">
                         @endif
                     </div>
-                    <div class="text-box">
+                    <div class="col-sm col-md-6 text-box">
                         <h3><em>{{ $section->title }}</em></h3>
                         @if($section->type === 'list')
                             <ul>

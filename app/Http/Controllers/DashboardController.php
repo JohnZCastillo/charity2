@@ -113,7 +113,7 @@ class DashboardController extends Controller
             SELECT i.created_at, i.name as name, sum(d.quantity) as total from donations d
             LEFT JOIN items i on i.id = d.item_id
             where d.created_at between :start and :end
-            group by i.id, i.name
+            group by i.id, i.name, i.created_at
         ",[
             'start' => $startDate,
             'end' => $endDate

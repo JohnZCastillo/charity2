@@ -28,6 +28,13 @@
 @section('body')
 
     <div class="p-2 bg-light h-100">
+
+    <div class="p-2">
+        <h4 class="fw-bold">Commodities</h4>
+    </div>
+           
+
+
 {{-- Error Message --}}
 @if ($errors->any())
     <div class="alert alert-warning alert-dismissible fade show" role="alert">

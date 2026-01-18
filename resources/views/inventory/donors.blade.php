@@ -16,6 +16,10 @@
 
     <div class="p-2 bg-light h-100">
 
+     <div class="p-2">
+        <h4 class="fw-bold">Benefactors</h4>
+    </div>
+           
         @if($errors->any())
             <h4>{{$errors->first()}}</h4>
         @endif

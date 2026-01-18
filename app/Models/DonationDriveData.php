@@ -18,7 +18,8 @@ class DonationDriveData extends Model
         'confirmed',
         'receipt',
         'email',
-        'type'
+        'type',
+        'reference'
     ];
 
     protected $casts = [

@@ -45,6 +45,7 @@
                     <th>From</th>
                     <th>Method</th>
                     <th>Receipt</th>
+                    <th>Reference</th>
                     <th>Email</th>
                     <th>Amount</th>
                     <th>Date</th>
@@ -60,6 +61,13 @@
                         <td>
                             @if($donation->receipt)
                                 <img style="width: 50px; height: 50px" src="{{\Illuminate\Support\Facades\Storage::url($donation->receipt)}}">
+                            @else
+                                N/A
+                            @endif
+                        </td>
+                          <td>
+                            @if($donation->reference)
+                                {{$donation->reference}}
                             @else
                                 N/A
                             @endif

@@ -3,6 +3,12 @@
 @section('body')
 
     <div class="p-2">
+
+        <div class="p-2">
+            <h4 class="fw-bold">Announcements</h4>
+        </div>
+            
+
         @if($errors->any())
             <h4>{{$errors->first()}}</h4>
         @endif

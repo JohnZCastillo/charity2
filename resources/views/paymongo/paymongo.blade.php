@@ -41,6 +41,11 @@
                     <input type="file" name="receipt" id="receipt" class="form-control" required>
                 </div>
 
+                <div class="mb-3">
+                    <label for="name" class="form-label fw-bold">Reference</label>
+                    <input type="text" name="reference" id="reference" class="form-control" required>
+                </div>
+
                 {{-- Donation Drive --}}
                 <div class="mb-3">
                     <label for="donation_drive_id" class="form-label fw-bold">Donation Drive</label>

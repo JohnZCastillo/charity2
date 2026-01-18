@@ -5,6 +5,12 @@
 @section('body')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
 <div class="container py-4">
+
+
+    <div class="p-2">
+        <h4 class="fw-bold">Form Builder</h4>
+    </div>
+
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
         <h2 class="mb-0">📋 Saved Forms</h2>
         <a href="{{ route('form-builder.create') }}" class="btn btn-success rounded">

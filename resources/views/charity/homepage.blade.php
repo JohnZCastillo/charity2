@@ -220,14 +220,14 @@
         <!-- Donor Logs -->
         <div class="card shadow-sm"> <!-- Removed mb-5 -->
             <div class="card-body">
-                <h2 class="fw-bold mb-4 text-success border-bottom pb-2 text-center">🙏 Donor Logs</h2>
+                <h2 class="fw-bold text-success pb-2 text-center">🙏 Donor Logs</h2>
+                <p class="fw-bold mb-4 text-success border-bottom pb-2 text-center">Thank you donors</p>
                 <div class="table-responsive">
                     <table class="table table-striped align-middle text-center">
                         <thead class="table-success">
                             <tr>
                                 <th>Date</th>
                                 <th>Donor</th>
-                                <th>Food Item / Goods</th>
                                 <th>Donation Type</th>
                             </tr>
                         </thead>
@@ -577,7 +577,6 @@
                             <tr>
                                 <td>${log.date}</td>
                                 <td>${log.contributor_name}</td>
-                                <td>${log.item}</td>
                                 <td>${log.donation_type}</td>
                             </tr>
                         `);

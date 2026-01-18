@@ -48,7 +48,7 @@ class HomeController extends Controller
             ->get();
 
         // --- Events ---
-        $events = Event::orderBy('created_at', 'asc')
+        $events = Event::orderBy('start', 'desc')
             ->with(['image'])
             ->get();
 

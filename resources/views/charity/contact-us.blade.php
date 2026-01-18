@@ -35,7 +35,7 @@
                     </span>
                     <div class="media-body">
                         <h3 class="mb-0">419-1710</h3>
-                        <p class="mb-0 text-secondary">Mon to Fri 9am to 6pm</p>
+                        <p class="mb-0 text-secondary">Mon to Fri 9:00 am to 5:00 pm</p>
                     </div>
                 </div>
                 <div class="d-flex gap-2 mb-2">

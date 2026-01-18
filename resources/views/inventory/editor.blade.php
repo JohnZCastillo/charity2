@@ -3,7 +3,12 @@
 @section('body')
 
     <div class="container py-4 bg-light min-vh-100">
-        @if ($errors->any())
+
+        <div class="p-2">
+            <h4 class="fw-bold">Editor</h4>
+        </div>
+
+    @if ($errors->any())
    <div class="alert alert-warning alert-dismissible fade show" role="alert">
         @if ($errors->count() > 1)
             <ul class="mb-0">

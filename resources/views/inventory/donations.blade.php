@@ -4,6 +4,10 @@
 
     <div class="p-2 h-100 bg-light">
 
+     <div class="p-2">
+        <h4 class="fw-bold">Donaton Drive</h4>
+    </div>
+           
     @if ($errors->any())
    <div class="alert alert-warning alert-dismissible fade show" role="alert">
         @if ($errors->count() > 1)
@@ -21,21 +25,21 @@
 
 
     <div class="row mx-0 align-items-center gap-2 mb-2">
-        <div class="col-12 col-md-2 flex-fill shadow p-3 rounded text-center">
+        <div class="bg-white col-12 col-md-2 flex-fill shadow p-3 rounded text-center">
             <div class="d-flex flex-column align-items-center">
                 <h1 class="fw-bold mb-0">{{  \App\Helpers\CurrencyFormatter::currency($totalDonations ?? 0)}}</h1>
                 <i class="text-secondary bx bx-lg bx-user-check"></i>
             </div>
             <small class="text-secondary">Donations this month</small>
         </div>
-        <div class="col-12 col-md-2 flex-fill shadow p-3 rounded text-center">
+        <div class="bg-white col-12 col-md-2 flex-fill shadow p-3 rounded text-center">
             <div class="d-flex flex-column align-items-center">
                 <h1 class="fw-bold mb-0">{{  \App\Helpers\CurrencyFormatter::currency($totalExpenses ?? 0)}}</h1>
                 <i class="text-secondary bx bx-lg bx-user-minus"></i>
             </div>
             <small class="text-secondary">Expenses this month</small>
         </div>
-        <div class="col-12 col-md-2 flex-fill shadow p-3 rounded text-center">
+        <div class="bg-white col-12 col-md-2 flex-fill shadow p-3 rounded text-center">
             <div class="d-flex flex-column align-items-center">
                 <h1 class="fw-bold mb-0">{{  \App\Helpers\CurrencyFormatter::currency($totalSubsidies ?? 0)}}</h1>
                 <i class="text-secondary bx bx-lg bx-package"></i>
@@ -94,10 +98,6 @@
                 New
             </button>
 
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addFundModal">
-                Add Fund
-            </button>
-
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#donateModal">
                 Donate
             </button>
@@ -146,6 +146,64 @@
                                         data-bs-target="#donationDriveUpdateModal{{$donation->id}}">
                                     <i class="fas fa-edit"></i> Edit
                                 </button>
+
+                                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addFundModal{{$donation->id}}">
+                                    Add Fund
+                                </button>
+
+                                <div class="modal fade" id="addFundModal{{$donation->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <form method="POST" action="/inventory/donate-fund" enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Fund</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="mb-2">
+                                                        <label for="receipt">Receipt</label>
+                                                        <input type="file" name="receipt" id="receipt" class="form-control" accept="image/*">
+                                                    </div>
+
+                                                    <div class="mb-2">
+                                                        <label for="from">Donor</label>
+                                                        <input type="text" name="from" id="donor" class="form-control" required>
+                                                    </div>
+
+                                                    <div class="mb-2">
+                                                        <label for="amount">Amount</label>
+                                                        <input min="1" type="number" name="amount" id="amount" class="form-control" required>
+                                                    </div>
+
+                                                    <div class="mb-2">
+                                                        <label for="email">Email (Optional)</label>
+                                                        <input type="email" name="email" id="email" class="form-control">
+                                                    </div>
+
+                                                    <div class="mb-2">
+                                                        <label for="type">Type</label>
+                                                        <select class="form-select" name="type" id="type" required>
+                                                            @foreach(\App\Enums\MoneyType::cases() as $type)
+                                                                <option value="{{$type->value}}">{{$type->value}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <label for="fund">Fund</label>
+                                                        <input readonly type="text"  value="{{$donation->title}}" class="form-control">
+
+                                                        <input type="hidden" value="{{$donation->id}}"  name="donation_drive_id" id="fund" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
 
                               <a href="{{ route('donations-drive.report', $donation->id) }}" class="btn btn-info">
                                     <i class="fas fa-file-alt"></i> Report

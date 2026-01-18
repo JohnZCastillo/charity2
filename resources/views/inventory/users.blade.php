@@ -4,6 +4,10 @@
 
     <div class="p-2 bg-light h-100">
 
+        <div class="p-2">
+            <h4 class="fw-bold">Users</h4>
+        </div>
+
         @if($errors->any())
             <div class="alert alert-danger" role="alert">
                 {{$errors->first()}}
