@@ -42,6 +42,35 @@
 
 @section('body')
 
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="otpModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <form id="otpForm">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">OTP Verification</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                    <p>We have sent a 6 digit code to your email, please enter them below to proceed with you appointment</p>
+                    <label>6 Digit Code</label>
+                    <input id="otpCode" type="number" class="form-control" placeholder="type here"/>
+                    <div id="otpError" class="text-danger p-2"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Verify</button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+
     <div class="container-fluid pt-2">
         <div class="pt-2">
             <h1>Appointment Request Form</h1>
@@ -154,6 +183,47 @@
         const start = document.querySelector('#start');
         const end = document.querySelector('#end');
         const appoinmentType = document.querySelector('#appointment_for');
+        const otpForm = document.querySelector('#otpForm');
+        const otpCode = document.querySelector('#otpCode');
+        const otpError = document.querySelector('#otpError');
+
+        const otpModal = new bootstrap.Modal(document.getElementById('otpModal'));
+
+        otpForm.addEventListener('submit',(e)=> {
+            
+            e.preventDefault();
+
+            if(otpCode.value?.length < 6){
+                otpError.innerHTML = 'Code must be 6 digit';
+                return;
+            }   
+
+            fetch("{{ route('otp.verify') }}",{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                },
+                body: JSON.stringify({
+                    code: otpCode.value,
+                    email: document.querySelector('#email').value
+                })
+            }).then(res => {
+
+                if(!res.ok){
+                    throw new Error('Invalid or Expired Code');
+                }
+
+                otpError.innerHTML = "";
+
+                otpModal.hide();
+
+                appointmentForm.submit();
+
+            }).catch(err => {
+                otpError.innerHTML = err.message;
+            })
+        })
         
         document.addEventListener('DOMContentLoaded', function () {
 
@@ -214,7 +284,20 @@
                 return;
             }
 
-            appointmentForm.submit();
+            fetch("{{ route('otp.generate') }}",{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                },
+                body: JSON.stringify({
+                    email: document.querySelector('#email').value
+                })
+            })
+
+            otpModal.show();
+
+            // appointmentForm.submit();
         })
 
         appoinmentType.addEventListener('change',(e)=>{
