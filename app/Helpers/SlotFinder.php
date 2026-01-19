@@ -27,6 +27,7 @@ class SlotFinder
 
         $appointments = Appointment::select(['start', 'end', 'date'])
             ->where('date', $date)
+            ->whereNotIn('status', ['cancelled','rescheduled'])
             ->get()
             ->toArray();
 
