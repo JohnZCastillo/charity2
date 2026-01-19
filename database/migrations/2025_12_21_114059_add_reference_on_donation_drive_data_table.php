@@ -12,7 +12,7 @@ return new class extends Migration
    public function up(): void
     {
         Schema::table('donation_drive_data', function (Blueprint $table) {
-            $table->text('reference')->default('');
+            $table->text('reference')->default(null);
         });
     }
 
