@@ -227,7 +227,7 @@
                         <thead class="table-success">
                             <tr>
                                 <th>Date</th>
-                                <th>Donor</th>
+                                <th>Benefactor</th>
                                 <th>Donation Type</th>
                             </tr>
                         </thead>
