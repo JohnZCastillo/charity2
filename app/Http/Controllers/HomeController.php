@@ -30,9 +30,7 @@ class HomeController extends Controller
             });
         });
 
-        $query->when($request->input('order'), function ($qb) use ($request) {
-            $qb->orderBy($request->input('order'), $request->input('sort', 'asc'));
-        });
+        $query->orderBy('created_at', 'desc');
 
         $announcements = $query->paginate(10);
 

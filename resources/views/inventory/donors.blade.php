@@ -74,7 +74,7 @@
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
-                        <td>Benefactors ID</td>
+                        <td>Benefactors Code</td>
                         <td>Name</td>
                         <td>Mobile</td>
                         <td>Email</td>

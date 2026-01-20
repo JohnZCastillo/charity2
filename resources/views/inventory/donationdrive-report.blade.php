@@ -85,7 +85,7 @@
     <div class="d-none">
         <div id="reportBody">
             <div class="text-center mb-3">
-                <h4 class="mb-0">MISSION CHARITY OF BROTHERS</h4>
+                <h4 class="mb-0">MISSIONARIES OF CHARITY BROTHERS</h4>
                 <h5 class="mb-0">BUKAL NG KAPAYAPAAN</h5>
                 <p class="mb-0">132-A Brgy. Luciano, Trece Martires City, Cavite</p>
                 <p class="mb-0">(046) 419-1710</p>

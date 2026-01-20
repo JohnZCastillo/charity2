@@ -217,11 +217,11 @@
             </div>
         </div>
 
-        <!-- Donor Logs -->
+        <!-- Thank You Benefactors -->
         <div class="card shadow-sm"> <!-- Removed mb-5 -->
             <div class="card-body">
-                <h2 class="fw-bold text-success pb-2 text-center">🙏 Donor Logs</h2>
-                <p class="fw-bold mb-4 text-success border-bottom pb-2 text-center">Thank you donors</p>
+                <h2 class="fw-bold text-success pb-2 text-center">🙏 Thank You Benefactors</h2>
+                
                 <div class="table-responsive">
                     <table class="table table-striped align-middle text-center">
                         <thead class="table-success">

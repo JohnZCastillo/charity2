@@ -5,7 +5,7 @@
     <div class="p-2 h-100 bg-light">
 
      <div class="p-2">
-        <h4 class="fw-bold">Donaton Drive</h4>
+        <h4 class="fw-bold">Donation Drive</h4>
     </div>
            
     @if ($errors->any())

@@ -17,7 +17,7 @@
     <div class="p-2 bg-light h-100">
 
      <div class="p-2">
-        <h4 class="fw-bold">Beneficiares</h4>
+        <h4 class="fw-bold">Beneficiaries</h4>
     </div>
            
 
@@ -75,7 +75,7 @@
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
-                        <td>Beneficiares ID</td>
+                        <td>Beneficiaries Code</td>
                         <td>Name</td>
                         <td>Mobile</td>
                         <td>Email</td>
