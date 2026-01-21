@@ -39,7 +39,7 @@ class APIController extends Controller
                 'session_id' =>  Session::getId(),
             ]);
             
-            Mail::to('johnzunigacastillo@gmail.com')->send(new OtpEmail( $generatedOtp['code']));
+            Mail::to($validated['email'])->send(new OtpEmail( $generatedOtp['code']));
 
             return response()->json(['message' => 'email sent']);
 
