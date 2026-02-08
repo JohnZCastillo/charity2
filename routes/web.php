@@ -227,6 +227,9 @@ Route::prefix('charity')->group(function () {
     Route::post('/donate', [\App\Http\Controllers\Charity\DonateController::class, 'index']);
 });
 
+Route::post('/api/otp', [\App\Http\Controllers\APIController::class, 'otp'])->name('otp.generate');
+Route::post('/api/otp-verify', [\App\Http\Controllers\APIController::class, 'verifyOtp'])->name('otp.verify');
+
 Route::get('/api/slot/{date}', [\App\Http\Controllers\APIController::class, 'slot']);
 Route::patch('/item/{item}', [ItemController::class, 'updateItem']);
 Route::post('/donor', [DonorController::class, 'addDonor']);

@@ -25,7 +25,7 @@
     }
 
     .section-padding {
-    padding: 40px 0; /* reduced vertical padding */
+    padding: 40px 5px; /* reduced vertical padding */
     }
 
     .container.section-padding + .container.section-padding {
@@ -203,16 +203,16 @@
         @if($aboutSections->has('general'))
             @foreach($aboutSections['general']->whereIn('type', ['text','image','list']) as $section)
                 <div 
-                    class="alt-section {{ $loop->iteration % 2 == 0 ? 'flex-row-reverse' : '' }}"
+                    class="row p-5 bg-white shadow rounded mb-3   {{ $loop->iteration % 2 == 0 ? 'flex-row-reverse' : '' }}"
                     data-aos="{{ $loop->iteration % 2 == 0 ? 'fade-left' : 'fade-right' }}"
                 >
-                    <div class="image-wrapper">
+                    <div class="col-sm col-md-6 image-wrapper mb-3">
                         @if($section->image)
-                            <img src="{{ $section->image }}" alt="{{ $section->title }}">
+                            <img  style="max-height: 400px;" class="img-fluid  w-100" src="{{ $section->image }}" alt="{{ $section->title }}">
                         @endif
                     </div>
-                    <div class="text-box">
-                        <h3><em>{{ $section->title }}</em></h3>
+                    <div class="col-sm col-md-6 text-box">
+                        <h3 class="mb-2"><em>{{ $section->title }}</em></h3>
                         @if($section->type === 'list')
                             <ul>
                                 @foreach(explode("\n", $section->content) as $item)
@@ -249,6 +249,7 @@
             @endforeach
         </div>
     </div>
+
     {{-- VISION / MISSION / OBJECTIVES --}}
 @if($aboutSections->has('vision_mission'))
 <div class="container section-padding text-center vision-card">

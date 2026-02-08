@@ -26,12 +26,17 @@
 @section('body')
     <div class="h-100 bg-light container-fluid">
 
+    <div class="p-2">
+         <h4 class="fw-bold">Dashboard</h4>
+    </div>
+
         <div class="py-2">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reportTypeModal">
                 Reports
             </button>
         </div>
 
+        
         <div class="row mx-0 align-items-center gap-2 mb-2">
     <!-- Donors -->
     <div class="col-12 col-md-2 flex-fill shadow p-3 rounded text-center">

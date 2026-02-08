@@ -48,6 +48,11 @@
 
         <div class="announcement-holder mx-auto">
             <h2 class="fw-bold">{{$announcement->title}}</h2>
+            @if(isset($announcement->created_at))
+            <p>
+                {{ $announcement->created_at->format('g:i A \o\n F j, Y') }}
+            </p>
+            @endif
             <div class="announcement-content">
                 {!! $announcement->content !!}
             </div>

@@ -104,6 +104,8 @@
         background: linear-gradient(45deg, red, blue, yellow); 
     }
 
+  
+
     </style>
     <!-- CSS here -->
     <link rel="stylesheet" href="/css/owl.carousel.min.css">
@@ -130,6 +132,11 @@
         .modal{
             top: 130px !important
         } 
+
+    .nav-title {
+       font-size: clamp(1rem, 0.2857rem + 2.2857vw, 2rem);
+    }
+
     </style>
 </head>
 <body>
@@ -169,7 +176,7 @@
         <div class="container-fluid px-2 px-lg-5 " style="min-height: 90px; heigh: max-content">
             <div class="navbar-brand">
                 <a href="/" style="text-decoration:none;">
-                <p class="fw-bold mb-0 pb-0 text-wrap">Missionaries of Charity Brothers</p>
+                <p class="fw-bold mb-0 pb-0 text-wrap nav-title">Missionaries of Charity Brothers</p>
                 {{-- <img src="/img/logo/logo.png" alt="Charity"> --}}
                 </a>
             </div>

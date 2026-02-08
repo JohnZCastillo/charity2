@@ -50,6 +50,7 @@
 </style>
 
 <div class="container py-4">
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Form Builder</h2>
         <a href="{{ route('form-builder.index') }}" class="btn btn-outline-secondary"><i class="fa fa-arrow-left"></i> Back to Forms</a>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\UserStatus;
 use App\Enums\UserType;
+use App\Helpers\IdHelper;
 use App\Models\Account;
 use App\Models\Address;
 use App\Models\Recipient;
@@ -20,7 +21,11 @@ class RecipientController extends Controller
 
         $query->when($request->input('search'), function ($query) use ($request) {
             $query->where(function ($query) use ($request) {
-                $query->whereLike('code', '%' . $request->input('search') . '%');
+
+                $id = $request->input('search');
+
+                $query->whereLike('id', '%' . IdHelper::parse($id,'BN'). '%');
+
                 $query->orWhereLike('name', '%' . $request->input('search') . '%');
                 $query->orWhereLike('email', '%' . $request->input('search') . '%');
                 $query->orWhereLike('mobile', '%' . $request->input('search') . '%');

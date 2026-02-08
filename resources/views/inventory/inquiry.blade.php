@@ -3,6 +3,11 @@
 @section('body')
 
     <div class="p-2 h-100 bg-light">
+
+        <div class="p-2">
+            <h4 class="fw-bold">Inquiries</h4>
+        </div>
+
  @if ($errors->any())
         <div class="alert alert-danger">
             {{ $errors->first() }}

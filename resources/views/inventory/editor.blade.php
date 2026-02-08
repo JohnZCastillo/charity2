@@ -3,7 +3,12 @@
 @section('body')
 
     <div class="container py-4 bg-light min-vh-100">
-        @if ($errors->any())
+
+        <div class="p-2">
+            <h4 class="fw-bold">Editor</h4>
+        </div>
+
+    @if ($errors->any())
    <div class="alert alert-warning alert-dismissible fade show" role="alert">
         @if ($errors->count() > 1)
             <ul class="mb-0">
@@ -46,10 +51,6 @@
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab">About Page</button>
         </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="donateus-tab" data-bs-toggle="tab" data-bs-target="#donateus" type="button" role="tab">Donate Page</button>
-        </li>
-        
     </ul>
 
     <div class="tab-content" id="cmsTabContent">

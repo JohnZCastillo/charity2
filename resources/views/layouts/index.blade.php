@@ -174,7 +174,7 @@
                     <a class="list-group-item list-group-item-action bg-transparent border-0 d-flex align-items-center gap-2"
                        href="/inventory/recipients">
                         <i class="bx bx-sm bx-user-minus"></i>
-                        <span class="d-none d-lg-block">Beneficiares</span>
+                        <span class="d-none d-lg-block">Beneficiaries</span>
                     </a>
                 </li>
 

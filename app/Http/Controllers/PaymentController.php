@@ -42,6 +42,8 @@ class PaymentController extends Controller
             $name   = $request->input('name');
             $email  = $request->input('email');
             $mobile = $request->input('mobile');
+            $reference = $request->input('reference');
+
     
             // Find donation drive
             $drive = DonationDrive::findOrFail($donationDriveId);
@@ -80,6 +82,7 @@ class PaymentController extends Controller
                 'email'             => $email,
                 'mobile'            => $mobile,
                 'receipt'           => $receipt,
+                'reference'         => $reference,
                 'confirmed'         => false,
                 'type'              => 'gcash'
             ]);

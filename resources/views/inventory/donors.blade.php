@@ -16,6 +16,10 @@
 
     <div class="p-2 bg-light h-100">
 
+     <div class="p-2">
+        <h4 class="fw-bold">Benefactors</h4>
+    </div>
+           
         @if($errors->any())
             <h4>{{$errors->first()}}</h4>
         @endif
@@ -38,7 +42,7 @@
                 <div class="col-6 col-md-3 d-flex align-items-center gap-2">
                     <label class="text-nowrap">Order By</label>
                     <select class="form-select" id="orderBy" name="order">
-                        <option @selected($app->request->order == 'code') value="code">Code</option>
+                        <option @selected($app->request->order == 'id') value="id">Code</option>
                         <option @selected($app->request->order == 'name') value="name">Name</option>
                     </select>
                 </div>
@@ -70,7 +74,7 @@
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
-                        <td>Donor ID</td>
+                        <td>Benefactors Code</td>
                         <td>Name</td>
                         <td>Mobile</td>
                         <td>Email</td>
@@ -82,7 +86,7 @@
                     <tbody>
                     @foreach($donors as $donor)
                         <tr>
-                            <td>{{$donor->code}}</td>
+                            <td>{{ 'BF' . str_pad($donor->id, 6, '0', STR_PAD_LEFT)}}</td>
                             <td>{{$donor->name}}</td>
                             <td>{{$donor->mobile}}</td>
                             <td>{{$donor->email}}</td>
